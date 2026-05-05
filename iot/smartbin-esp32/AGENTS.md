@@ -39,7 +39,7 @@ Do not edit:
 - ESP32 and servo power supply must share ground.
 - Keep fail-safe default: lid closed.
 - Unknown command, lost connection, or error should not leave lid open.
-- IR sensor confirmation should be sent once per active session.
+- Ultrasonic deposit confirmation should be sent once per active session.
 - Serial logs should be clear enough for demo troubleshooting.
 - Do not hardcode real Wi-Fi passwords or device secrets in committed firmware.
 
@@ -68,5 +68,5 @@ Manual checks:
 - servo opens and closes at configured angles;
 - heartbeat appears in backend;
 - command polling receives `open_lid`;
-- IR event completes deposit;
+- ultrasonic event completes deposit;
 - no sensor event means no points.
