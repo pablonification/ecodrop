@@ -29,11 +29,24 @@ type ProfileScreenProps = {
   view: ProfileView;
   setView: (view: ProfileView) => void;
   onLogout: () => void;
+  onOpenWithdraw: () => void;
+  onOpenWithdrawalHistory: () => void;
+  onOpenNotifications: () => void;
+  onOpenSupport: () => void;
 };
 
-export function ProfileScreen({ user, view, setView, onLogout }: ProfileScreenProps) {
+export function ProfileScreen({
+  user,
+  view,
+  setView,
+  onLogout,
+  onOpenWithdraw,
+  onOpenWithdrawalHistory,
+  onOpenNotifications,
+  onOpenSupport
+}: ProfileScreenProps) {
   if (view !== "main") {
-    return <ProfileSubView view={view} user={user} onBack={() => setView("main")} />;
+    return <ProfileSubView view={view} user={user} onBack={() => setView("main")} onOpenSupport={onOpenSupport} />;
   }
 
   return (
@@ -52,23 +65,23 @@ export function ProfileScreen({ user, view, setView, onLogout }: ProfileScreenPr
           <small>~ Rp {(user.points * 100).toLocaleString("id-ID")}</small>
         </div>
         <WalletCards size={21} />
-        <button>Tarik Poin</button>
+        <button onClick={onOpenWithdraw}>Tarik Poin</button>
       </section>
 
       <span className="profile-section-label">Pengaturan Akun</span>
       <section className="profile-menu-list">
         <ProfileRow icon={<Pencil size={19} />} label="Edit Profil" onClick={() => setView("edit")} />
-        <ProfileRow icon={<History size={19} />} label="Riwayat Penarikan" />
+        <ProfileRow icon={<History size={19} />} label="Riwayat Penarikan" onClick={onOpenWithdrawalHistory} />
       </section>
 
       <span className="profile-section-label">Dukungan</span>
       <section className="profile-menu-list">
         <ProfileRow icon={<CircleHelp size={19} />} label="Bantuan" onClick={() => setView("help")} />
         <ProfileRow icon={<Shield size={19} />} label="Kebijakan Privasi" onClick={() => setView("privacy")} />
-        <ProfileRow icon={<Bell size={19} />} label="Notifikasi" />
+        <ProfileRow icon={<Bell size={19} />} label="Notifikasi" onClick={onOpenNotifications} />
       </section>
 
-      <button className="contact-button">
+      <button className="contact-button" onClick={onOpenSupport}>
         <Headphones size={19} />
         Hubungi Kami
       </button>
@@ -81,7 +94,17 @@ export function ProfileScreen({ user, view, setView, onLogout }: ProfileScreenPr
   );
 }
 
-function ProfileSubView({ view, user, onBack }: { view: ProfileView; user: EcoUser; onBack: () => void }) {
+function ProfileSubView({
+  view,
+  user,
+  onBack,
+  onOpenSupport
+}: {
+  view: ProfileView;
+  user: EcoUser;
+  onBack: () => void;
+  onOpenSupport: () => void;
+}) {
   const title = view === "edit" ? "Edit Profil" : view === "help" ? "Bantuan" : "Kebijakan Privasi";
   return (
     <div className={`profile-subview ${view}-profile-view`}>
@@ -92,8 +115,8 @@ function ProfileSubView({ view, user, onBack }: { view: ProfileView; user: EcoUs
         <h1>{title}</h1>
       </header>
       {view === "edit" && <EditProfileView user={user} />}
-      {view === "help" && <HelpView />}
-      {view === "privacy" && <PrivacyView />}
+      {view === "help" && <HelpView onOpenSupport={onOpenSupport} />}
+      {view === "privacy" && <PrivacyView onOpenSupport={onOpenSupport} />}
     </div>
   );
 }
@@ -162,7 +185,7 @@ function ProfileField({
   );
 }
 
-function HelpView() {
+function HelpView({ onOpenSupport }: { onOpenSupport: () => void }) {
   return (
     <div className="help-view">
       <label className="help-search">
@@ -205,13 +228,13 @@ function HelpView() {
         <img className="help-callout-watermark" src={figmaAssets.helpSupportAgent} alt="" />
         <h2>Butuh bantuan lebih?</h2>
         <p>Tidak menemukan jawaban yang Anda cari? Hubungi tim EcoDrop untuk bantuan lebih lanjut.</p>
-        <button>Hubungi Kami</button>
+        <button onClick={onOpenSupport}>Hubungi Kami</button>
       </section>
     </div>
   );
 }
 
-function PrivacyView() {
+function PrivacyView({ onOpenSupport }: { onOpenSupport: () => void }) {
   const sections = [
     {
       icon: <CircleHelp size={28} />,
@@ -292,7 +315,7 @@ function PrivacyView() {
 
       <footer className="privacy-footer">
         <p>Jika Anda memiliki pertanyaan terkait privasi, hubungi kami.</p>
-        <button>
+        <button onClick={onOpenSupport}>
           <img src={figmaAssets.privacyContactIcon} alt="" />
           Hubungi Kami
         </button>

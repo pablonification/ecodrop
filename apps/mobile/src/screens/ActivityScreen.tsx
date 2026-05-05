@@ -10,9 +10,10 @@ type ActivityScreenProps = {
   selected: DepositTransaction | null;
   onSelect: (transaction: DepositTransaction) => void;
   onBack: () => void;
+  onOpenReward: () => void;
 };
 
-export function ActivityScreen({ transactions, selected, onSelect, onBack }: ActivityScreenProps) {
+export function ActivityScreen({ transactions, selected, onSelect, onBack, onOpenReward }: ActivityScreenProps) {
   useEffect(() => {
     document.querySelector(".activity-content")?.scrollTo({ top: 0 });
   }, [selected]);
@@ -71,7 +72,7 @@ export function ActivityScreen({ transactions, selected, onSelect, onBack }: Act
         <div className="reward-banner-copy">
           <h2>Tukar 5.000 Poin!</h2>
           <p>Dapatkan tote bag EcoDrop eksklusif</p>
-          <button>Klaim Sekarang</button>
+          <button onClick={onOpenReward}>Klaim Sekarang</button>
         </div>
       </section>
     </div>

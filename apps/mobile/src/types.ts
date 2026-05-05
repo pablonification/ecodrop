@@ -12,3 +12,11 @@ export type FlowStep =
   | "failed";
 
 export type ProfileView = "main" | "edit" | "help" | "privacy";
+
+export type OverlayView =
+  | "withdraw"
+  | "withdrawal-history"
+  | "notifications"
+  | "support"
+  | "smartbins"
+  | "reward";
