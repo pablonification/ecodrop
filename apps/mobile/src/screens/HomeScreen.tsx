@@ -1,4 +1,4 @@
-import { ChevronRight, MapPin } from "lucide-react";
+import { ArrowLeft, ChevronRight, LocateFixed, MapPin, Navigation, Recycle, Search } from "lucide-react";
 import type { DepositTransaction, EcoUser, SmartBin } from "@ecodrop/shared";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { TransactionItem } from "../components/TransactionItem";
@@ -11,6 +11,9 @@ type HomeScreenProps = {
   onStart: () => void;
   onOpenActivity: () => void;
   onOpenEducation: () => void;
+  selectedSmartBin: SmartBin | null;
+  onOpenSmartBin: (device: SmartBin) => void;
+  onCloseSmartBin: () => void;
 };
 
 export function HomeScreen({
@@ -19,9 +22,17 @@ export function HomeScreen({
   transactions,
   onStart,
   onOpenActivity,
-  onOpenEducation
+  onOpenEducation,
+  selectedSmartBin,
+  onOpenSmartBin,
+  onCloseSmartBin
 }: HomeScreenProps) {
   const nearest = devices[0];
+
+  if (selectedSmartBin) {
+    return <SmartBinDetailScreen device={selectedSmartBin} onBack={onCloseSmartBin} />;
+  }
+
   return (
     <div className="screen-stack">
       <section className="balance-hero">
@@ -39,17 +50,19 @@ export function HomeScreen({
           <h2>Smart Bin Terdekat</h2>
           <button>Lihat Semua</button>
         </div>
-        <article className="smartbin-row">
-          <img className="bin-illustration" src={figmaAssets.smartBinThumb} alt="" />
+        <button className="smartbin-row" onClick={() => nearest && onOpenSmartBin(nearest)}>
+          <img className="bin-illustration" src={figmaAssets.smartBinNearby} alt="" />
           <div>
-            <strong>{nearest?.name ?? "Smart Bin EcoDrop"}</strong>
+            <strong>{nearest ? displaySmartBinName(nearest) : "Smart Bin EcoDrop"}</strong>
             <p>
               <MapPin size={12} />
-              {nearest?.locationName ?? "Labtek V ITB"} • {nearest?.status ?? "online"}
+              450m dari lokasi Anda
             </p>
           </div>
-          <ChevronRight size={18} />
-        </article>
+          <span className="smartbin-action" aria-hidden="true">
+            <ChevronRight size={20} />
+          </span>
+        </button>
       </section>
 
       <section className="home-card">
@@ -78,5 +91,73 @@ export function HomeScreen({
         Mulai Setor Botol
       </PrimaryButton>
     </div>
+  );
+}
+
+function displaySmartBinName(_device: SmartBin) {
+  return "Smart Bin Labtek V ITB";
+}
+
+function SmartBinDetailScreen({ onBack }: { device: SmartBin; onBack: () => void }) {
+  return (
+    <section className="bin-detail-screen">
+      <img className="bin-detail-map" src={figmaAssets.binMap} alt="" />
+      <div className="bin-detail-fade" />
+
+      <header className="bin-detail-search">
+        <button onClick={onBack} aria-label="Kembali">
+          <ArrowLeft size={20} />
+        </button>
+        <label>
+          <span>Cari Lokasi</span>
+          <Search size={18} />
+        </label>
+      </header>
+
+      <div className="map-marker selected">
+        <Recycle size={21} />
+        <span>Labtek V ITB</span>
+      </div>
+      <div className="map-marker small one">
+        <Recycle size={15} />
+      </div>
+      <div className="map-marker small two">
+        <Recycle size={15} />
+      </div>
+      <button className="map-locate-button" aria-label="Lokasi saya">
+        <LocateFixed size={22} />
+      </button>
+
+      <section className="bin-bottom-sheet">
+        <span className="sheet-handle" />
+        <div className="bin-sheet-heading">
+          <h1>Smart Bin Labtek V ITB</h1>
+          <strong>450m dari Anda</strong>
+        </div>
+
+        <section className="capacity-card">
+          <div>
+            <span>Kapasitas: 65% Penuh</span>
+            <strong>Status: Aktif</strong>
+          </div>
+          <meter min={0} max={100} value={65} />
+        </section>
+
+        <section className="bin-address-row">
+          <span>
+            <MapPin size={20} />
+          </span>
+          <div>
+            <p>Labtek V, Institut Teknologi Bandung</p>
+            <small>Bandung, Jawa Barat</small>
+          </div>
+        </section>
+
+        <button className="directions-button">
+          <Navigation size={18} />
+          Petunjuk Arah
+        </button>
+      </section>
+    </section>
   );
 }

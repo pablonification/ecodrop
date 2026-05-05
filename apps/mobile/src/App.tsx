@@ -41,11 +41,13 @@ export default function App() {
   const [finalTransaction, setFinalTransaction] = useState<DepositTransaction | null>(null);
   const [selectedTransaction, setSelectedTransaction] = useState<DepositTransaction | null>(null);
   const [selectedArticle, setSelectedArticle] = useState<EducationArticle | null>(null);
+  const [selectedSmartBin, setSelectedSmartBin] = useState<SmartBin | null>(null);
   const [profileView, setProfileView] = useState<ProfileView>("main");
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem(DEV_SESSION_STORAGE_KEY) === "active");
 
   const nearestBin = useMemo(() => devices[0] ?? demoSmartBins[0], [devices]);
   const isProfileSubView = tab === "profile" && profileView !== "main";
+  const isHomeBinDetail = tab === "home" && selectedSmartBin !== null;
 
   useEffect(() => {
     void loadAppData();
@@ -94,6 +96,7 @@ export default function App() {
     setTab("home");
     setSelectedArticle(null);
     setSelectedTransaction(null);
+    setSelectedSmartBin(null);
     setProfileView("main");
     setFinalTransaction(null);
     setSession(null);
@@ -111,6 +114,7 @@ export default function App() {
     setSession(null);
     setFinalTransaction(null);
     setTab(nextTab);
+    setSelectedSmartBin(null);
     await loadAppData();
   }
 
@@ -118,6 +122,7 @@ export default function App() {
     setTab(nextTab);
     setSelectedArticle(null);
     setSelectedTransaction(null);
+    setSelectedSmartBin(null);
     setProfileView("main");
   }
 
@@ -135,6 +140,7 @@ export default function App() {
     setProfileView("main");
     setSelectedArticle(null);
     setSelectedTransaction(null);
+    setSelectedSmartBin(null);
     setSession(null);
     setFinalTransaction(null);
   }
@@ -146,8 +152,16 @@ export default function App() {
           <LoginScreen onLogin={startDemoSession} />
         ) : flow === "idle" ? (
           <>
-            {!isProfileSubView && <AppHeader />}
-            <div className={isProfileSubView ? "screen-content profile-subview-content" : "screen-content"}>
+            {!isProfileSubView && !isHomeBinDetail && <AppHeader />}
+            <div
+              className={
+                isProfileSubView
+                  ? "screen-content profile-subview-content"
+                  : isHomeBinDetail
+                    ? "screen-content home-bin-detail-content"
+                    : "screen-content"
+              }
+            >
               {tab === "home" && (
                 <HomeScreen
                   user={user}
@@ -156,6 +170,9 @@ export default function App() {
                   onStart={startDeposit}
                   onOpenActivity={() => changeTab("activity")}
                   onOpenEducation={() => changeTab("education")}
+                  selectedSmartBin={selectedSmartBin}
+                  onOpenSmartBin={setSelectedSmartBin}
+                  onCloseSmartBin={() => setSelectedSmartBin(null)}
                 />
               )}
               {tab === "activity" && (
@@ -178,7 +195,7 @@ export default function App() {
                 <ProfileScreen user={user} view={profileView} setView={setProfileView} onLogout={logout} />
               )}
             </div>
-            {!isProfileSubView && <BottomNav tab={tab} setTab={changeTab} onStart={startDeposit} />}
+            {!isProfileSubView && !isHomeBinDetail && <BottomNav tab={tab} setTab={changeTab} onStart={startDeposit} />}
           </>
         ) : (
           <DepositFlow
