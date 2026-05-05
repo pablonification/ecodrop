@@ -282,5 +282,17 @@ export const demoTransactions: DepositTransaction[] = [
     status: "failed",
     failureReason: "Bottle was not inserted before the 10 second timer expired.",
     createdAt: new Date(Date.now() - 1000 * 60 * 90).toISOString()
+  },
+  {
+    id: "trx-003",
+    sessionId: "sess-003",
+    userId: "user-demo-001",
+    deviceId: "ECO-SMARTBIN-002",
+    brand: "Aqua",
+    volumeMl: 1500,
+    points: estimatePoints(1500),
+    status: "success",
+    sensorConfirmedAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 - 1000 * 60 * 12).toISOString()
   }
 ];

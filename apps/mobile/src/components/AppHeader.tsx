@@ -1,11 +1,11 @@
 import { CircleHelp } from "lucide-react";
+import { figmaAssets } from "../assets/figma";
 
 export function AppHeader() {
   return (
     <header className="app-header">
       <div className="brand-mark" aria-label="EcoDrop">
-        <span className="brand-leaf" />
-        <span>ecodrop</span>
+        <img src={figmaAssets.ecodropLogo} alt="EcoDrop" />
       </div>
       <button className="icon-button subtle" aria-label="Bantuan">
         <CircleHelp size={20} />

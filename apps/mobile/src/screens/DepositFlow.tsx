@@ -19,6 +19,7 @@ import {
   getTransactions,
   validateBottle
 } from "../api";
+import { figmaAssets } from "../assets/figma";
 import { DepositCameraOverlay } from "../components/DepositCameraOverlay";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { StatusCard } from "../components/StatusCard";
@@ -147,7 +148,12 @@ export function DepositFlow({
       )}
 
       {flow === "qr" && (
-        <DepositCameraOverlay mode="qr" primaryLabel="Simulasikan Scan QR" onPrimary={onCreateSession} />
+        <DepositCameraOverlay
+          mode="qr"
+          primaryLabel="Simulasikan Scan QR"
+          onPrimary={onCreateSession}
+          onBack={onClose}
+        />
       )}
 
       {flow === "capture" && (
@@ -164,6 +170,7 @@ export function DepositFlow({
             primaryLabel="Ambil Foto Botol"
             onPrimary={() => fileInputRef.current?.click()}
             onInvalidDemo={() => validateCurrentBottle(undefined, true)}
+            onBack={onClose}
           />
         </>
       )}
@@ -193,7 +200,7 @@ export function DepositFlow({
           <p>Poin akan ditambahkan setelah botol berhasil dimasukkan ke dalam tong.</p>
           <section className="detected-card">
             <div className="bottle-thumb">
-              <span className="bottle-outline small" />
+              <img src={figmaAssets.aquaBottle} alt="" />
             </div>
             <div className="result-grid">
               <div>
@@ -322,6 +329,11 @@ function DepositResult({
       <div className="result-icon">{tone === "success" ? <Check size={38} /> : <X size={38} />}</div>
       <h2>{title}</h2>
       <p>{description}</p>
+      <img
+        className="deposit-result-banner"
+        src={tone === "success" ? figmaAssets.successBanner : figmaAssets.failedBanner}
+        alt=""
+      />
       <section className="result-summary-card">
         <strong className="points-total">+{points} Poin</strong>
         <span>{tone === "success" ? "Berhasil Ditambahkan" : "Poin Batal Ditambahkan"}</span>

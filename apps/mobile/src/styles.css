@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap");
+
 :root {
   font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #191c1e;
@@ -38,7 +40,7 @@ button:disabled {
 }
 
 .phone-frame {
-  width: min(430px, 100vw);
+  width: min(390px, 100vw);
   height: 100vh;
   max-height: 940px;
   background: #f7f9fc;
@@ -98,40 +100,24 @@ button:disabled {
 
 .login-screen {
   min-height: 100%;
-  padding: 36px 24px;
+  padding: 236px 32px 278px;
   display: grid;
-  align-content: space-between;
+  align-content: start;
   gap: 32px;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(0, 170, 91, 0.18), transparent 35%),
-    #f7f9fc;
+  background: linear-gradient(180deg, #d9f7e3 0%, #f8faf9 26%, #f7f9fc 100%);
 }
 
 .login-brand {
   display: grid;
   justify-items: center;
-  gap: 12px;
+  gap: 14px;
   text-align: center;
-  padding-top: 54px;
 }
 
-.login-logo {
-  width: 78px;
-  height: 78px;
-  border-radius: 28px;
-  display: grid;
-  place-items: center;
-  color: #ffffff;
-  background: linear-gradient(135deg, #006d38, #00aa5b);
-  box-shadow: 0 18px 36px rgba(0, 109, 56, 0.22);
-}
-
-.login-brand h1 {
-  margin: 0;
-  color: #1e293b;
-  font-size: 38px;
-  line-height: 44px;
-  letter-spacing: 0;
+.login-logo-mark {
+  width: 202px;
+  height: auto;
+  display: block;
 }
 
 .login-brand p,
@@ -143,22 +129,31 @@ button:disabled {
 }
 
 .login-card {
-  padding: 28px;
-  border-radius: 36px;
+  padding: 32px;
+  border-radius: 44px;
   display: grid;
-  justify-items: start;
-  gap: 14px;
+  justify-items: stretch;
   background: #ffffff;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 22px 42px rgba(0, 109, 56, 0.08);
 }
 
-.login-card svg {
-  color: #006d38;
+.google-login-button {
+  min-height: 54px;
+  border: 1px solid #d9e2dd;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  color: #191c1e;
+  background: #f8faf9;
+  font-size: 16px;
+  font-weight: 800;
 }
 
-.login-card h2 {
-  margin: 0;
-  font-size: 24px;
+.google-login-button img {
+  width: 20px;
+  height: 20px;
 }
 
 .screen-stack {
@@ -176,11 +171,11 @@ button:disabled {
 }
 
 .balance-hero {
-  min-height: 178px;
+  height: 184px;
   padding: 25px 24px;
   display: grid;
   align-content: space-between;
-  gap: 28px;
+  gap: 0;
   color: #ffffff;
   border-radius: 48px;
   background: linear-gradient(152deg, #006d38 0%, #006d38 48%, #065f46 100%);
@@ -1388,6 +1383,368 @@ button:disabled {
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
+}
+
+.brand-mark img {
+  width: 139px;
+  height: auto;
+  display: block;
+}
+
+.figma-image-card {
+  width: 100%;
+  border: 0;
+  padding: 0;
+  display: block;
+  background-color: transparent;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  box-shadow: none;
+}
+
+.eco-tip-card {
+  min-height: 193px;
+  border-radius: 46px;
+}
+
+.smartbin-row img.bin-illustration {
+  object-fit: cover;
+  box-shadow: none;
+}
+
+.education-hero {
+  min-height: 257px;
+  border-radius: 42px;
+  padding: 0;
+}
+
+.article-row {
+  min-height: 132px;
+  grid-template-columns: 96px minmax(0, 1fr) 18px;
+  gap: 16px;
+  padding: 16px;
+  border: 0;
+  border-radius: 28px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+.article-thumb {
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+  object-fit: cover;
+  background: #f8fafc;
+}
+
+.article-cover {
+  width: 100%;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+  border-radius: 36px;
+  object-fit: cover;
+  background: #f8fafc;
+}
+
+.reward-banner {
+  min-height: 133px;
+  border-radius: 44px;
+}
+
+.detail-cover-image {
+  width: 100%;
+  border-radius: 32px;
+  display: block;
+  object-fit: cover;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+}
+
+.profile-avatar {
+  object-fit: cover;
+  background: transparent;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.edit-avatar {
+  width: 128px;
+  height: 128px;
+  justify-self: center;
+  margin-bottom: 8px;
+}
+
+.profile-screen {
+  gap: 22px;
+}
+
+.profile-identity {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 7px;
+}
+
+.profile-identity .profile-avatar {
+  width: 98px;
+  height: 98px;
+}
+
+.profile-identity h2 {
+  margin: 10px 0 0;
+  font-size: 22px;
+  line-height: 29px;
+  font-weight: 900;
+}
+
+.profile-identity p {
+  margin: 0;
+  color: #476557;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.profile-savings-card {
+  min-height: 192px;
+  padding: 25px 24px;
+  border-radius: 44px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 36px;
+  gap: 16px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #008b4d, #00aa5b);
+  box-shadow: 0 20px 36px rgba(0, 109, 56, 0.22);
+}
+
+.profile-savings-card span,
+.profile-section-label {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.profile-savings-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 900;
+}
+
+.profile-savings-card small {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.profile-savings-card > svg {
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.profile-savings-card button {
+  grid-column: 1 / -1;
+  min-height: 48px;
+  border: 0;
+  border-radius: 999px;
+  color: #006d38;
+  background: #ffffff;
+  font-weight: 900;
+}
+
+.profile-section-label {
+  color: #8b9b93;
+  margin: 4px 8px -8px;
+}
+
+.profile-menu-list {
+  display: grid;
+  gap: 14px;
+}
+
+.profile-menu-list .profile-row {
+  min-height: 72px;
+  padding: 16px 18px;
+  border: 0;
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.contact-button,
+.logout-button {
+  min-height: 58px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 900;
+  background: transparent;
+}
+
+.contact-button {
+  border: 1px solid #c9ead9;
+  color: #006d38;
+}
+
+.logout-button {
+  border: 0;
+  color: #dc2626;
+}
+
+.app-version {
+  justify-self: center;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+}
+
+.input-like {
+  min-height: 56px;
+  padding: 0 18px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #191c1e;
+  background: #f2f4f7;
+}
+
+.input-like svg {
+  color: #006d38;
+}
+
+.security-note {
+  padding: 24px;
+  border-radius: 28px;
+  background: #e7f4ee;
+}
+
+.security-note h2 {
+  margin: 0 0 8px;
+  color: #4d6b5d;
+  font-size: 18px;
+}
+
+.security-note p {
+  margin: 0;
+  color: #6d7b6e;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.camera-view {
+  padding: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.camera-view.qr::before {
+  display: none;
+}
+
+.camera-top-button,
+.camera-hotspot,
+.camera-icon-hotspot {
+  position: absolute;
+  z-index: 4;
+  border: 0;
+  padding: 0;
+  color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.camera-top-button svg,
+.camera-hotspot svg,
+.camera-icon-hotspot svg {
+  opacity: 0;
+}
+
+.camera-back-button {
+  left: 28px;
+  top: 34px;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+}
+
+.camera-help-button {
+  right: 24px;
+  top: 34px;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+}
+
+.qr-hotspot {
+  left: 52px;
+  top: 209px;
+  width: 286px;
+  height: 288px;
+  border-radius: 40px;
+}
+
+.qr-hotspot span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.capture-hotspot {
+  left: calc(50% - 42px);
+  bottom: 36px;
+  width: 84px;
+  height: 84px;
+  border-radius: 999px;
+}
+
+.flash-hotspot {
+  left: 24px;
+  bottom: 48px;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+}
+
+.gallery-hotspot {
+  right: 24px;
+  bottom: 48px;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+}
+
+.invalid-demo-action {
+  left: 18px;
+  bottom: 124px;
+  width: 120px;
+  height: 34px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.bottle-thumb img {
+  width: 82px;
+  height: 113px;
+  object-fit: contain;
+}
+
+.deposit-result-banner {
+  width: 100%;
+  border-radius: 28px;
+  display: block;
+  object-fit: cover;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
 }
 
 @media (min-width: 700px) {

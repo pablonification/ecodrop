@@ -1,6 +1,21 @@
-import { ArrowLeft, Bell, ChevronRight, CircleHelp, FileText, Mail, Pencil, Shield, UserRound } from "lucide-react";
+import {
+  ArrowLeft,
+  Bell,
+  ChevronRight,
+  CircleHelp,
+  FileText,
+  Headphones,
+  History,
+  LogOut,
+  Mail,
+  MapPin,
+  Pencil,
+  Shield,
+  WalletCards
+} from "lucide-react";
 import type { EcoUser } from "@ecodrop/shared";
 import { PrimaryButton } from "../components/PrimaryButton";
+import { figmaAssets } from "../assets/figma";
 import type { ProfileView } from "../types";
 
 type ProfileScreenProps = {
@@ -13,20 +28,46 @@ export function ProfileScreen({ user, view, setView }: ProfileScreenProps) {
   if (view !== "main") return <ProfileSubView view={view} user={user} onBack={() => setView("main")} />;
 
   return (
-    <div className="screen-stack">
+    <div className="screen-stack profile-screen">
       <h1 className="screen-title">Profil</h1>
-      <section className="profile-hero">
-        <div className="profile-avatar">{initials(user.name)}</div>
-        <h2>{user.name}</h2>
+      <section className="profile-identity">
+        <img className="profile-avatar" src={figmaAssets.profileAvatar} alt="" />
+        <h2>{displayProfileName(user.name)}</h2>
         <p>{user.email}</p>
-        <span>{user.tier} Tier</span>
       </section>
-      <section className="home-card profile-menu">
+
+      <section className="profile-savings-card">
+        <div>
+          <span>Total Tabungan</span>
+          <strong>{user.points.toLocaleString("id-ID")} Poin</strong>
+          <small>~ Rp {(user.points * 100).toLocaleString("id-ID")}</small>
+        </div>
+        <WalletCards size={21} />
+        <button>Tarik Poin</button>
+      </section>
+
+      <span className="profile-section-label">Pengaturan Akun</span>
+      <section className="profile-menu-list">
         <ProfileRow icon={<Pencil size={19} />} label="Edit Profil" onClick={() => setView("edit")} />
+        <ProfileRow icon={<History size={19} />} label="Riwayat Penarikan" />
+      </section>
+
+      <span className="profile-section-label">Dukungan</span>
+      <section className="profile-menu-list">
         <ProfileRow icon={<CircleHelp size={19} />} label="Bantuan" onClick={() => setView("help")} />
         <ProfileRow icon={<Shield size={19} />} label="Kebijakan Privasi" onClick={() => setView("privacy")} />
         <ProfileRow icon={<Bell size={19} />} label="Notifikasi" />
       </section>
+
+      <button className="contact-button">
+        <Headphones size={19} />
+        Hubungi Kami
+      </button>
+      <button className="logout-button">
+        <LogOut size={18} />
+        Keluar
+      </button>
+      <small className="app-version">ECODROP V2.4.0</small>
     </div>
   );
 }
@@ -41,6 +82,7 @@ function ProfileSubView({ view, user, onBack }: { view: ProfileView; user: EcoUs
       </button>
       {view === "edit" && (
         <form className="form-card">
+          <img className="profile-avatar edit-avatar" src={figmaAssets.profileAvatarLarge} alt="" />
           <label>
             Nama
             <input defaultValue={user.name} />
@@ -53,6 +95,17 @@ function ProfileSubView({ view, user, onBack }: { view: ProfileView; user: EcoUs
             Nomor Telepon
             <input defaultValue="081234567890" />
           </label>
+          <label>
+            Lokasi
+            <span className="input-like">
+              <MapPin size={18} />
+              Bandung, Indonesia
+            </span>
+          </label>
+          <section className="security-note">
+            <h2>Keamanan Akun</h2>
+            <p>Pastikan data Anda selalu terbaru untuk memudahkan proses penukaran reward EcoDrop.</p>
+          </section>
           <PrimaryButton>Simpan Perubahan</PrimaryButton>
         </form>
       )}
@@ -89,11 +142,8 @@ function ProfileRow({ icon, label, onClick }: { icon: React.ReactNode; label: st
   );
 }
 
-function initials(name: string): string {
-  return name
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
+function displayProfileName(name: string): string {
+  const parts = name.split(" ").filter(Boolean);
+  if (parts.length <= 2) return name;
+  return `${parts[0]} ${parts[parts.length - 1]}`;
 }

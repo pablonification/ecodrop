@@ -41,7 +41,13 @@ export async function getTransactions(userId = "user-demo-001"): Promise<Deposit
   try {
     const response = await fetch(`${API_BASE_URL}/api/transactions?user_id=${userId}`);
     if (!response.ok) throw new Error("Transaction API unavailable");
-    return (await response.json()).map(normalizeTransaction);
+    const transactions = (await response.json()).map(normalizeTransaction);
+    if (transactions.length >= 3) return transactions;
+    const usedIds = new Set(transactions.map((transaction: DepositTransaction) => transaction.id));
+    return [
+      ...transactions,
+      ...demoTransactions.filter((transaction) => !usedIds.has(transaction.id))
+    ].slice(0, 4);
   } catch {
     return demoTransactions;
   }

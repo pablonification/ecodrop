@@ -2,6 +2,7 @@ import { ArrowLeft, CheckCircle2, Download, Leaf } from "lucide-react";
 import type { DepositTransaction } from "@ecodrop/shared";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { TransactionItem } from "../components/TransactionItem";
+import { figmaAssets } from "../assets/figma";
 
 type ActivityScreenProps = {
   transactions: DepositTransaction[];
@@ -50,11 +51,11 @@ export function ActivityScreen({ transactions, selected, onSelect, onBack }: Act
           ))}
         </div>
       </section>
-      <section className="reward-banner">
-        <h2>Tukar 5.000 Poin!</h2>
-        <p>Dapatkan Tote Bag EcoDrop eksklusif</p>
-        <button>Klaim Sekarang</button>
-      </section>
+      <button
+        className="figma-image-card reward-banner"
+        style={{ backgroundImage: `url(${figmaAssets.activityRewardBanner})` }}
+        aria-label="Tukar 5.000 Poin. Klaim sekarang"
+      />
     </div>
   );
 }
@@ -99,6 +100,7 @@ function ActivityDetail({ transaction, onBack }: { transaction: DepositTransacti
         <Leaf size={22} />
         <p>Kontribusi Anda membantu mengurangi emisi karbon di area perkotaan.</p>
       </section>
+      <img className="detail-cover-image" src={figmaAssets.activityDetailCover} alt="" />
       <PrimaryButton onClick={onBack}>Kembali</PrimaryButton>
       <button className="receipt-link">
         <Download size={16} />

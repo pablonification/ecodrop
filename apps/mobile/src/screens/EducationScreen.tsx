@@ -1,5 +1,6 @@
-import { ArrowLeft, BookOpen, ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 import type { EducationArticle } from "@ecodrop/shared";
+import { figmaAssets } from "../assets/figma";
 
 type EducationScreenProps = {
   articles: EducationArticle[];
@@ -10,15 +11,15 @@ type EducationScreenProps = {
 
 export function EducationScreen({ articles, selected, onSelect, onBack }: EducationScreenProps) {
   if (selected) {
+    const selectedIndex = Math.max(0, articles.findIndex((article) => article.id === selected.id));
+    const cover = figmaAssets.educationThumbs[selectedIndex % figmaAssets.educationThumbs.length];
     return (
       <article className="article-detail">
         <button className="back-link" onClick={onBack}>
           <ArrowLeft size={20} />
           Artikel
         </button>
-        <div className="article-cover">
-          <BookOpen size={72} />
-        </div>
+        <img className="article-cover" src={cover} alt="" />
         <span className="category-pill">{selected.category}</span>
         <h1>{selected.title}</h1>
         <p className="article-lead">{selected.excerpt}</p>
@@ -34,16 +35,19 @@ export function EducationScreen({ articles, selected, onSelect, onBack }: Educat
   return (
     <div className="screen-stack">
       <h1 className="screen-title">Edukasi</h1>
-      <section className="education-hero">
-        <span>Artikel Pilihan</span>
-        <h2>Kelola sampah plastik dari rumah</h2>
-        <p>Tips ringkas untuk membuat setoran EcoDrop lebih bersih dan bernilai.</p>
-      </section>
-      {articles.map((article) => (
+      <button
+        className="figma-image-card education-hero"
+        onClick={() => articles[0] && onSelect(articles[0])}
+        style={{ backgroundImage: `url(${figmaAssets.educationHero})` }}
+        aria-label="Artikel unggulan: Cara memilah plastik rumah tangga dengan benar"
+      />
+      {articles.map((article, index) => (
         <button className="article-row" key={article.id} onClick={() => onSelect(article)}>
-          <span className="article-thumb">
-            <BookOpen size={22} />
-          </span>
+          <img
+            className="article-thumb"
+            src={figmaAssets.educationThumbs[index % figmaAssets.educationThumbs.length]}
+            alt=""
+          />
           <span>
             <strong>{article.title}</strong>
             <small>{article.excerpt}</small>

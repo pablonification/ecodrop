@@ -1,7 +1,8 @@
-import { ChevronRight, MapPin, Wallet } from "lucide-react";
+import { ChevronRight, MapPin } from "lucide-react";
 import type { DepositTransaction, EcoUser, SmartBin } from "@ecodrop/shared";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { TransactionItem } from "../components/TransactionItem";
+import { figmaAssets } from "../assets/figma";
 
 type HomeScreenProps = {
   user: EcoUser;
@@ -39,7 +40,7 @@ export function HomeScreen({
           <button>Lihat Semua</button>
         </div>
         <article className="smartbin-row">
-          <span className="bin-illustration" />
+          <img className="bin-illustration" src={figmaAssets.smartBinThumb} alt="" />
           <div>
             <strong>{nearest?.name ?? "Smart Bin EcoDrop"}</strong>
             <p>
@@ -63,14 +64,12 @@ export function HomeScreen({
         </div>
       </section>
 
-      <section className="eco-tip">
-        <span>TIPS HARI INI</span>
-        <h2>Cara memilah plastik rumah tangga dengan benar</h2>
-        <PrimaryButton onClick={onOpenEducation} variant="secondary">
-          Baca Selengkapnya
-        </PrimaryButton>
-        <Wallet className="tip-watermark" size={118} />
-      </section>
+      <button
+        className="figma-image-card eco-tip-card"
+        onClick={onOpenEducation}
+        style={{ backgroundImage: `url(${figmaAssets.ecoTipCard})` }}
+        aria-label="Baca tips hari ini: Cara memilah plastik rumah tangga dengan benar"
+      />
 
       <PrimaryButton onClick={onStart} className="home-cta">
         Mulai Setor Botol
