@@ -109,6 +109,16 @@ export function DepositFlow({
     setFlow("failed");
   }
 
+  async function retryInvalidBottle() {
+    setIsBusy(true);
+    try {
+      await onCreateSession();
+      setFinalTransaction(null);
+    } finally {
+      setIsBusy(false);
+    }
+  }
+
   const title = useMemo(() => {
     const titles: Record<FlowStep, string> = {
       idle: "Setor",
@@ -215,7 +225,7 @@ export function DepositFlow({
             title="Botol tidak tervalidasi"
             description={validation?.reason ?? "Foto belum cukup jelas. Pastikan botol PET berada di atas kotak referensi."}
           />
-          <PrimaryButton onClick={() => setFlow("capture")}>
+          <PrimaryButton onClick={retryInvalidBottle} disabled={isBusy}>
             <RotateCcw size={18} />
             Foto Ulang
           </PrimaryButton>
