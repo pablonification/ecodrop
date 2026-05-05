@@ -5,8 +5,8 @@ import educationThumb2 from "./education-thumb-2.png";
 import educationThumb3 from "./education-thumb-3.png";
 import educationThumb4 from "./education-thumb-4.png";
 import googleIcon from "./google-icon.png";
-import profileAvatar from "./profile-avatar.png";
-import profileAvatarLarge from "./profile-avatar-large.png";
+import loginBrand from "./login-brand.svg";
+import profilePhoto from "./profile-photo.png";
 import rewardForestBg from "./reward-forest-bg.png";
 import smartBinThumb from "./smart-bin-thumb.png";
 
@@ -15,8 +15,8 @@ export const figmaAssets = {
   ecodropLogo,
   educationThumbs: [educationThumb1, educationThumb2, educationThumb3, educationThumb4],
   googleIcon,
-  profileAvatar,
-  profileAvatarLarge,
+  loginBrand,
+  profilePhoto,
   rewardForestBg,
   smartBinThumb
 };

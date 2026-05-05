@@ -45,6 +45,7 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem(DEV_SESSION_STORAGE_KEY) === "active");
 
   const nearestBin = useMemo(() => devices[0] ?? demoSmartBins[0], [devices]);
+  const isProfileSubView = tab === "profile" && profileView !== "main";
 
   useEffect(() => {
     void loadAppData();
@@ -125,6 +126,19 @@ export default function App() {
     setIsLoggedIn(true);
   }
 
+  function logout() {
+    localStorage.removeItem(DEV_SESSION_STORAGE_KEY);
+    localStorage.removeItem(ACTIVE_DEPOSIT_STORAGE_KEY);
+    setIsLoggedIn(false);
+    setTab("home");
+    setFlow("idle");
+    setProfileView("main");
+    setSelectedArticle(null);
+    setSelectedTransaction(null);
+    setSession(null);
+    setFinalTransaction(null);
+  }
+
   return (
     <main className="app-shell">
       <section className="phone-frame">
@@ -132,8 +146,8 @@ export default function App() {
           <LoginScreen onLogin={startDemoSession} />
         ) : flow === "idle" ? (
           <>
-            <AppHeader />
-            <div className="screen-content">
+            {!isProfileSubView && <AppHeader />}
+            <div className={isProfileSubView ? "screen-content profile-subview-content" : "screen-content"}>
               {tab === "home" && (
                 <HomeScreen
                   user={user}
@@ -161,10 +175,10 @@ export default function App() {
                 />
               )}
               {tab === "profile" && (
-                <ProfileScreen user={user} view={profileView} setView={setProfileView} />
+                <ProfileScreen user={user} view={profileView} setView={setProfileView} onLogout={logout} />
               )}
             </div>
-            <BottomNav tab={tab} setTab={changeTab} onStart={startDeposit} />
+            {!isProfileSubView && <BottomNav tab={tab} setTab={changeTab} onStart={startDeposit} />}
           </>
         ) : (
           <DepositFlow
