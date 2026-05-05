@@ -1,0 +1,95 @@
+openapi: 3.1.0
+info:
+  title: EcoDrop API Seed
+  version: 0.1.0
+  description: Initial API seed for the EcoDrop prototype. The FastAPI app exposes live docs at /docs.
+servers:
+  - url: http://localhost:8000
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: Backend is running
+  /api/deposit-sessions:
+    post:
+      summary: Create a deposit session from a SmartBin QR token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [qr_token, user_id]
+              properties:
+                qr_token:
+                  type: string
+                  example: ECO-SMARTBIN-001
+                user_id:
+                  type: string
+                  example: user-demo-001
+      responses:
+        "200":
+          description: Deposit session created
+  /api/deposit-sessions/{session_id}/validate:
+    post:
+      summary: Validate bottle image and queue SmartBin open command if valid
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Updated session with validation result
+  /api/iot/devices/{device_id}/commands/next:
+    get:
+      summary: Poll next SmartBin command
+      parameters:
+        - in: path
+          name: device_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: SmartBin command or noop
+  /api/iot/devices/{device_id}/sensor-events:
+    post:
+      summary: Submit IR sensor event for active deposit session
+      parameters:
+        - in: path
+          name: device_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [session_id, sensor_state]
+              properties:
+                session_id:
+                  type: string
+                sensor_state:
+                  type: string
+                  enum: [object_detected, clear]
+                raw_value:
+                  type: integer
+      responses:
+        "200":
+          description: Sensor event accepted or ignored

@@ -1,0 +1,21 @@
+{
+  "name": "ecodrop-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "EcoDrop smart recycling bank monorepo for mobile app, admin web dashboard, backend, AI/CV service, and ESP32 SmartBin firmware.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:mobile": "npm run dev --workspace @ecodrop/mobile",
+    "dev:web": "npm run dev --workspace @ecodrop/web-admin",
+    "build:mobile": "npm run build --workspace @ecodrop/mobile",
+    "build:web": "npm run build --workspace @ecodrop/web-admin",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

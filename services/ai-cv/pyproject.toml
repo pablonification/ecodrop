@@ -1,0 +1,15 @@
+[project]
+name = "ecodrop-ai-cv"
+version = "0.1.0"
+description = "EcoDrop AI/CV validation service scaffold"
+requires-python = ">=3.9"
+dependencies = [
+  "fastapi>=0.110.0",
+  "uvicorn[standard]>=0.27.0",
+  "pydantic>=2.6.0",
+  "python-multipart>=0.0.9",
+  "opencv-python-headless>=4.10.0",
+  "numpy>=1.26.0",
+  "Pillow>=10.3.0",
+  "httpx>=0.27.0"
+]
