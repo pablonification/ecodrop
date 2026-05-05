@@ -3,6 +3,7 @@ from datetime import timedelta
 import pytest
 from fastapi.testclient import TestClient
 
+from app.core.config import get_settings
 from app.main import app
 from app.services.state import now_utc, state
 
@@ -53,6 +54,21 @@ def test_validation_queues_lid_but_does_not_award_points(client: TestClient):
     command = client.get("/api/iot/devices/ECO-SMARTBIN-001/commands/next").json()
     assert command["action"] == "open_lid"
     assert command["session_id"] == session["id"]
+
+
+def test_production_iot_endpoints_require_device_token(client: TestClient, monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("ECODROP_ENV", "production")
+    monkeypatch.setenv("ECODROP_DEVICE_TOKEN", "test-device-token")
+    get_settings.cache_clear()
+
+    denied_response = client.get("/api/iot/devices/ECO-SMARTBIN-001/commands/next")
+    allowed_response = client.get(
+        "/api/iot/devices/ECO-SMARTBIN-001/commands/next",
+        headers={"X-Device-Token": "test-device-token"},
+    )
+
+    assert denied_response.status_code == 401
+    assert allowed_response.status_code == 200
 
 
 def test_active_session_can_be_recovered_after_duplicate_start(client: TestClient):

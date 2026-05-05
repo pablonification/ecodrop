@@ -1,0 +1,40 @@
+services:
+  backend:
+    build:
+      context: ./services/backend
+    container_name: ecodrop-backend
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+      - redis
+      - ai-cv
+
+  ai-cv:
+    build:
+      context: ./services/ai-cv
+    container_name: ecodrop-ai-cv
+    restart: unless-stopped
+    env_file: .env
+    expose:
+      - "8010"
+
+  mongodb:
+    image: mongo:7
+    container_name: ecodrop-mongodb
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:7-alpine
+    container_name: ecodrop-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+volumes:
+  mongo_data:
+  redis_data:

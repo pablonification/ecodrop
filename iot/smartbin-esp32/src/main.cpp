@@ -14,7 +14,7 @@
 // Update these values before flashing.
 const char* WIFI_SSID = "YOUR_WIFI_SSID";
 const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
-const char* BACKEND_BASE_URL = "http://192.168.1.10:8000";
+const char* BACKEND_BASE_URL = "http://139.59.245.101:8000";
 const char* DEVICE_ID = "ECO-SMARTBIN-001";
 const char* DEVICE_TOKEN = "dev-device-token";
 const char* FIRMWARE_VERSION = "0.1.0";

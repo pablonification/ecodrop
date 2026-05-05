@@ -27,3 +27,7 @@ Use a separate 5V 3A supply for the servo and connect grounds between the ESP32 
 - `GET /api/iot/devices/{device_id}/commands/next`
 - `POST /api/iot/devices/{device_id}/commands/{command_id}/ack`
 - `POST /api/iot/devices/{device_id}/sensor-events`
+
+For the VPS demo backend, keep the firmware `BACKEND_BASE_URL` pointed to
+`http://139.59.245.101:8000` and send the configured device token through the
+`X-Device-Token` header.

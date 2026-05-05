@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     bottle_min_volume_ml: int = 250
     bottle_max_volume_ml: int = 2000
     points_per_100ml: int = 10
+    ecodrop_device_token: str = "dev-device-token"
 
 
 @lru_cache

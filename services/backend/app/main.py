@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.auth import get_current_user, require_admin
+from app.core.auth import get_current_user, require_admin, require_device_token
 from app.models.schemas import (
     CommandAckRequest,
     CreateEducationArticleRequest,
@@ -203,7 +203,7 @@ async def update_admin_education_article(
 
 
 @app.post("/api/iot/devices/register")
-async def register_device(payload: DeviceRegistrationRequest):
+async def register_device(payload: DeviceRegistrationRequest, _device_auth: bool = Depends(require_device_token)):
     existing = state.devices.get(payload.device_id)
     if existing:
         existing.status = "online"
@@ -241,7 +241,11 @@ async def register_device(payload: DeviceRegistrationRequest):
 
 
 @app.post("/api/iot/devices/{device_id}/heartbeat")
-async def device_heartbeat(device_id: str, payload: HeartbeatRequest):
+async def device_heartbeat(
+    device_id: str,
+    payload: HeartbeatRequest,
+    _device_auth: bool = Depends(require_device_token),
+):
     device = state.devices.get(device_id)
     if device is None:
         raise HTTPException(status_code=404, detail="SmartBin device not found")
@@ -258,7 +262,7 @@ async def device_heartbeat(device_id: str, payload: HeartbeatRequest):
 
 
 @app.get("/api/iot/devices/{device_id}/commands/next")
-async def get_next_device_command(device_id: str):
+async def get_next_device_command(device_id: str, _device_auth: bool = Depends(require_device_token)):
     if device_id not in state.devices:
         raise HTTPException(status_code=404, detail="SmartBin device not found")
     command = state.next_command(device_id)
@@ -276,7 +280,12 @@ async def get_next_device_command(device_id: str):
 
 
 @app.post("/api/iot/devices/{device_id}/commands/{command_id}/ack")
-async def acknowledge_device_command(device_id: str, command_id: str, payload: CommandAckRequest):
+async def acknowledge_device_command(
+    device_id: str,
+    command_id: str,
+    payload: CommandAckRequest,
+    _device_auth: bool = Depends(require_device_token),
+):
     try:
         return state.acknowledge_command(device_id, command_id, payload.status, payload.message)
     except KeyError:
@@ -284,7 +293,11 @@ async def acknowledge_device_command(device_id: str, command_id: str, payload: C
 
 
 @app.post("/api/iot/devices/{device_id}/sensor-events")
-async def receive_sensor_event(device_id: str, payload: SensorEventRequest):
+async def receive_sensor_event(
+    device_id: str,
+    payload: SensorEventRequest,
+    _device_auth: bool = Depends(require_device_token),
+):
     if device_id not in state.devices:
         raise HTTPException(status_code=404, detail="SmartBin device not found")
     if payload.sensor_state != "object_detected":
