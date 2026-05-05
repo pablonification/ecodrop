@@ -96,6 +96,71 @@ button:disabled {
   padding: 32px 24px 132px;
 }
 
+.login-screen {
+  min-height: 100%;
+  padding: 36px 24px;
+  display: grid;
+  align-content: space-between;
+  gap: 32px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(0, 170, 91, 0.18), transparent 35%),
+    #f7f9fc;
+}
+
+.login-brand {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  text-align: center;
+  padding-top: 54px;
+}
+
+.login-logo {
+  width: 78px;
+  height: 78px;
+  border-radius: 28px;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  background: linear-gradient(135deg, #006d38, #00aa5b);
+  box-shadow: 0 18px 36px rgba(0, 109, 56, 0.22);
+}
+
+.login-brand h1 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 38px;
+  line-height: 44px;
+  letter-spacing: 0;
+}
+
+.login-brand p,
+.login-card p {
+  margin: 0;
+  color: #476557;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.login-card {
+  padding: 28px;
+  border-radius: 36px;
+  display: grid;
+  justify-items: start;
+  gap: 14px;
+  background: #ffffff;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+}
+
+.login-card svg {
+  color: #006d38;
+}
+
+.login-card h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
 .screen-stack {
   display: grid;
   gap: 18px;

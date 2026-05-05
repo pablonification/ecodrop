@@ -23,10 +23,12 @@ import { ActivityScreen } from "./screens/ActivityScreen";
 import { DepositFlow } from "./screens/DepositFlow";
 import { EducationScreen } from "./screens/EducationScreen";
 import { HomeScreen } from "./screens/HomeScreen";
+import { LoginScreen } from "./screens/LoginScreen";
 import { ProfileScreen } from "./screens/ProfileScreen";
 import type { FlowStep, ProfileView, Tab } from "./types";
 
 const ACTIVE_DEPOSIT_STORAGE_KEY = "ecodrop.activeDeposit";
+const DEV_SESSION_STORAGE_KEY = "ecodrop.devSession";
 
 export default function App() {
   const [tab, setTab] = useState<Tab>("home");
@@ -40,6 +42,7 @@ export default function App() {
   const [selectedTransaction, setSelectedTransaction] = useState<DepositTransaction | null>(null);
   const [selectedArticle, setSelectedArticle] = useState<EducationArticle | null>(null);
   const [profileView, setProfileView] = useState<ProfileView>("main");
+  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem(DEV_SESSION_STORAGE_KEY) === "active");
 
   const nearestBin = useMemo(() => devices[0] ?? demoSmartBins[0], [devices]);
 
@@ -117,10 +120,17 @@ export default function App() {
     setProfileView("main");
   }
 
+  function startDemoSession() {
+    localStorage.setItem(DEV_SESSION_STORAGE_KEY, "active");
+    setIsLoggedIn(true);
+  }
+
   return (
     <main className="app-shell">
       <section className="phone-frame">
-        {flow === "idle" ? (
+        {!isLoggedIn ? (
+          <LoginScreen onLogin={startDemoSession} />
+        ) : flow === "idle" ? (
           <>
             <AppHeader />
             <div className="screen-content">
