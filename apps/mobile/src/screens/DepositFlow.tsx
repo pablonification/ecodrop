@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import type { DepositSession, DepositTransaction, SmartBin } from "@ecodrop/shared";
 import {
+  AUTO_DEMO_SENSOR_CONFIRM,
+  DEMO_SENSOR_CONFIRM_DELAY_MS,
   DEPOSIT_INSERT_WINDOW_SECONDS,
   ENABLE_DEMO_SENSOR_CONFIRM,
   confirmInsert,
@@ -53,10 +55,12 @@ export function DepositFlow({
 }: DepositFlowProps) {
   const [timer, setTimer] = useState(DEPOSIT_INSERT_WINDOW_SECONDS);
   const [isBusy, setIsBusy] = useState(false);
+  const [sensorSimulationStatus, setSensorSimulationStatus] = useState<"idle" | "waiting" | "detecting">("idle");
   const [qrManual, setQrManual] = useState("");
   const [qrError, setQrError] = useState<string | null>(null);
   const [qrStatus, setQrStatus] = useState<QrScannerStatus>("idle");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const simulatedSessionRef = useRef<string | null>(null);
   const qrLiveAvailable = useMemo(
     () => typeof window !== "undefined" && "BarcodeDetector" in window && !!navigator.mediaDevices?.getUserMedia,
     []
@@ -106,6 +110,26 @@ export function DepositFlow({
   }, [flow, session, setFinalTransaction, setFlow, setSession]);
 
   useEffect(() => {
+    if (flow !== "insert" || !session || session.status !== "awaiting_insert") {
+      if (flow !== "insert") {
+        setSensorSimulationStatus("idle");
+        simulatedSessionRef.current = null;
+      }
+      return;
+    }
+    if (!AUTO_DEMO_SENSOR_CONFIRM || simulatedSessionRef.current === session.id) return;
+
+    simulatedSessionRef.current = session.id;
+    setSensorSimulationStatus("waiting");
+    const timeout = window.setTimeout(() => {
+      setSensorSimulationStatus("detecting");
+      void confirmSensorForDemo();
+    }, DEMO_SENSOR_CONFIRM_DELAY_MS);
+
+    return () => window.clearTimeout(timeout);
+  }, [flow, session?.id, session?.status]);
+
+  useEffect(() => {
     if (flow !== "qr") return;
     setQrError(null);
   }, [flow]);
@@ -124,14 +148,18 @@ export function DepositFlow({
   async function confirmSensorForDemo() {
     if (!session) return;
     setIsBusy(true);
-    const transaction = await confirmInsert(session.id);
-    setIsBusy(false);
-    if (transaction?.status === "success") {
-      setFinalTransaction(transaction);
-      setFlow("success");
-      return;
+    try {
+      const transaction = await confirmInsert(session.id);
+      if (transaction?.status === "success") {
+        setFinalTransaction(transaction);
+        setSensorSimulationStatus("idle");
+        setFlow("success");
+        return;
+      }
+      setFlow("failed");
+    } finally {
+      setIsBusy(false);
     }
-    setFlow("failed");
   }
 
   async function retryInvalidBottle() {
@@ -333,8 +361,14 @@ export function DepositFlow({
           <section className="pending-card">
             <TimerReset size={28} />
             <div>
-              <strong>Poin Tertunda</strong>
-              <p>Poin masuk otomatis setelah sensor SmartBin mengonfirmasi botol.</p>
+              <strong>{sensorSimulationStatus === "detecting" ? "Sensor mendeteksi botol" : "Poin Tertunda"}</strong>
+              <p>
+                {AUTO_DEMO_SENSOR_CONFIRM
+                  ? sensorSimulationStatus === "detecting"
+                    ? "Simulasi sensor sedang mengonfirmasi botol dan menutup tong."
+                    : "Simulasi sensor akan berjalan otomatis beberapa detik setelah tong terbuka."
+                  : "Poin masuk otomatis setelah sensor SmartBin mengonfirmasi botol."}
+              </p>
             </div>
           </section>
           {ENABLE_DEMO_SENSOR_CONFIRM && (
