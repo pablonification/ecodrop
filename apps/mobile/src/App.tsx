@@ -48,6 +48,8 @@ export default function App() {
   const nearestBin = useMemo(() => devices[0] ?? demoSmartBins[0], [devices]);
   const isProfileSubView = tab === "profile" && profileView !== "main";
   const isHomeBinDetail = tab === "home" && selectedSmartBin !== null;
+  const isEducationTab = tab === "education";
+  const isEducationDetail = isEducationTab && selectedArticle !== null;
 
   useEffect(() => {
     void loadAppData();
@@ -152,13 +154,15 @@ export default function App() {
           <LoginScreen onLogin={startDemoSession} />
         ) : flow === "idle" ? (
           <>
-            {!isProfileSubView && !isHomeBinDetail && <AppHeader />}
+            {!isProfileSubView && !isHomeBinDetail && !isEducationTab && <AppHeader />}
             <div
               className={
                 isProfileSubView
                   ? "screen-content profile-subview-content"
                   : isHomeBinDetail
                     ? "screen-content home-bin-detail-content"
+                    : isEducationTab
+                      ? "screen-content education-content"
                     : "screen-content"
               }
             >
@@ -195,7 +199,7 @@ export default function App() {
                 <ProfileScreen user={user} view={profileView} setView={setProfileView} onLogout={logout} />
               )}
             </div>
-            {!isProfileSubView && !isHomeBinDetail && <BottomNav tab={tab} setTab={changeTab} onStart={startDeposit} />}
+            {!isProfileSubView && !isHomeBinDetail && !isEducationDetail && <BottomNav tab={tab} setTab={changeTab} onStart={startDeposit} />}
           </>
         ) : (
           <DepositFlow

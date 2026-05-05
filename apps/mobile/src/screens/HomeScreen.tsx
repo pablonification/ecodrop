@@ -1,6 +1,5 @@
 import { ArrowLeft, ChevronRight, LocateFixed, MapPin, Navigation, Recycle, Search } from "lucide-react";
 import type { DepositTransaction, EcoUser, SmartBin } from "@ecodrop/shared";
-import { PrimaryButton } from "../components/PrimaryButton";
 import { TransactionItem } from "../components/TransactionItem";
 import { figmaAssets } from "../assets/figma";
 
@@ -86,10 +85,6 @@ export function HomeScreen({
         </span>
         <span className="tip-shape" aria-hidden="true" />
       </button>
-
-      <PrimaryButton onClick={onStart} className="home-cta">
-        Mulai Setor Botol
-      </PrimaryButton>
     </div>
   );
 }
