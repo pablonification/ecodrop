@@ -6,9 +6,9 @@ This assignment is designed for a 3-person implementation team. It keeps ownersh
 
 | Person | Primary Ownership | Secondary Support | Main Plans |
 | --- | --- | --- | --- |
-| Person A | Mobile App | UX polish, demo script for user flow | `mobile/PLAN-mobile-core.md`, `mobile/PLAN-mobile-integration-polish.md` |
-| Person B | Backend + AI/CV | API contract, database, reward integrity, admin APIs | `backend/PLAN-backend-core.md`, `backend/PLAN-backend-ai-iot.md` |
-| Person C | Web Admin + IoT | Dashboard, SmartBin firmware, integration QA | `web-admin/PLAN-web-core.md`, `web-admin/PLAN-web-integration-polish.md`, `iot/PLAN-iot-smartbin.md`, `integration/PLAN-contracts-and-integration.md` |
+| Omar Berliansyah + Muhammad Adam Mirza | Mobile App | UX polish, demo script for user flow | `mobile/PLAN-mobile-core.md`, `mobile/PLAN-mobile-integration-polish.md` |
+| Arqila Surya Putra | Backend + AI/CV | API contract, database, reward integrity, admin APIs | `backend/PLAN-backend-core.md`, `backend/PLAN-backend-ai-iot.md` |
+| Bryan Adi | Web Admin + IoT | Dashboard, SmartBin firmware, integration QA | `web-admin/PLAN-web-core.md`, `web-admin/PLAN-web-integration-polish.md`, `iot/PLAN-iot-smartbin.md`, `integration/PLAN-contracts-and-integration.md` |
 
 ## Why This Split Works
 
@@ -16,7 +16,7 @@ This assignment is designed for a 3-person implementation team. It keeps ownersh
 - Person B owns the backend source of truth, which is the riskiest part because points must only be awarded after SmartBin sensor confirmation.
 - Person C owns operator-facing dashboard work and the physical IoT demo, then leads integration QA because those two areas reveal whether backend state is visible and operational.
 
-## Person A: Mobile App Owner
+## Omar Berliansyah + Muhammad Adam Mirza: Mobile App Owners
 
 ### Scope
 
@@ -51,7 +51,7 @@ This assignment is designed for a 3-person implementation team. It keeps ownersh
 - Mobile fallback/demo mode if backend is offline.
 - Build passes with `npm run build:mobile`.
 
-## Person B: Backend + AI/CV Owner
+## Arqila Surya Putra: Backend + AI/CV Owner
 
 ### Scope
 
@@ -83,7 +83,7 @@ This assignment is designed for a 3-person implementation team. It keeps ownersh
   - timeout;
   - duplicate sensor event.
 
-## Person C: Web Admin + IoT + Integration Owner
+## Bryan Adi: Web Admin + IoT + Integration Owner
 
 ### Scope
 
@@ -126,11 +126,34 @@ This assignment is designed for a 3-person implementation team. It keeps ownersh
   - sensor event confirms deposit;
   - admin dashboard shows transaction/device state.
 
+
+## Zidni Alkindi: Documentation, PPT, And Cross-Team Support
+
+### Scope
+
+- Own final documentation and presentation alignment.
+- Keep the implementation narrative consistent with Deliverable 3.
+- Help with code review, QA, or implementation tasks when another owner is blocked.
+- Collect screenshots, API proof, serial monitor logs, and E2E demo evidence for PPT/report.
+
+### Key Rules
+
+- Do not let docs claim behavior that the prototype cannot demonstrate.
+- Keep architecture, API contract, and PPT screenshots synchronized with actual implementation.
+- When helping code, follow the relevant scoped `AGENTS.md` and plan for that area.
+
+### Deliverables
+
+- Updated docs and PPT materials.
+- Demo script and speaking notes.
+- QA checklist from mobile, backend, web admin, and IoT.
+- Integration evidence: screenshots, API responses, or serial monitor logs.
+
 ## Shared Milestones
 
 ### Milestone 1: Contract Freeze
 
-Owner: Person B, reviewed by Person A and C.
+Owner: Arqila Surya Putra, reviewed by Omar Berliansyah, Muhammad Adam Mirza, and Bryan Adi.
 
 - Finalize lifecycle statuses.
 - Finalize API field names.
@@ -141,13 +164,14 @@ Owner: Person B, reviewed by Person A and C.
 
 Owner: Everyone.
 
-- Person A builds mobile against mock/real API.
-- Person B builds backend and AI/CV service.
-- Person C builds admin dashboard and IoT firmware scaffold.
+- Omar Berliansyah and Muhammad Adam Mirza build mobile against mock/real API.
+- Arqila Surya Putra builds backend and AI/CV service.
+- Bryan Adi builds admin dashboard and IoT firmware scaffold.
+- Zidni Alkindi keeps documents/PPT aligned and helps code review or implementation where needed.
 
 ### Milestone 3: First End-To-End Demo
 
-Owner: Person C, supported by Person B.
+Owner: Bryan Adi, supported by Arqila Surya Putra.
 
 Required flow:
 
@@ -164,19 +188,20 @@ Required flow:
 
 Owner: Everyone.
 
-- Person A polishes mobile screens.
-- Person B stabilizes API, logs, and tests.
-- Person C polishes dashboard, firmware demo, and E2E script.
+- Omar Berliansyah and Muhammad Adam Mirza polish mobile screens.
+- Arqila Surya Putra stabilizes API, logs, and tests.
+- Bryan Adi polishes dashboard, firmware demo, and E2E script.
+- Zidni Alkindi updates documentation, PPT, and final demo narrative.
 
 ## Suggested Timeline
 
-| Day | Person A | Person B | Person C |
-| --- | --- | --- | --- |
-| 1 | Mobile screen structure | Backend schema + session API | Admin layout + IoT wiring review |
-| 2 | Deposit flow UI | Validation + transaction lifecycle | Dashboard tables + firmware polling |
-| 3 | Backend integration | AI/CV mock/Roboflow adapter | ESP32 heartbeat + command handling |
-| 4 | Mobile polish | Idempotency + admin APIs | Admin integration + sensor event |
-| 5 | Bug fixing | E2E fixes | E2E test lead + demo script |
+| Day | Omar + Adam | Arqila | Bryan | Zidni |
+| --- | --- | --- | --- | --- |
+| 1 | Mobile screen structure | Backend schema + session API | Admin layout + IoT wiring review | Docs/PPT implementation outline |
+| 2 | Deposit flow UI | Validation + transaction lifecycle | Dashboard tables + firmware polling | Update architecture/API docs |
+| 3 | Backend integration | AI/CV mock/Roboflow adapter | ESP32 heartbeat + command handling | PPT screenshots and demo story |
+| 4 | Mobile polish | Idempotency + admin APIs | Admin integration + sensor event | Review docs vs implementation |
+| 5 | Bug fixing | E2E fixes | E2E test lead + demo script | Final report/PPT polish |
 
 ## Handoff Checklist
 
