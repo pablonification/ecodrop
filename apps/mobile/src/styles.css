@@ -3071,18 +3071,19 @@ button:disabled {
 }
 
 .activity-screen .summary-green::after {
-  content: "";
+  content: none;
+}
+
+.summary-scan-deco {
   position: absolute;
   right: -23px;
   top: -18px;
   width: 75px;
   height: 75px;
-  border-radius: 16px;
-  opacity: 0.14;
-  background:
-    linear-gradient(90deg, transparent 42%, #ffffff 42% 58%, transparent 58%),
-    linear-gradient(0deg, transparent 42%, #ffffff 42% 58%, transparent 58%);
+  object-fit: contain;
+  opacity: 0.26;
   transform: scale(1.5);
+  pointer-events: none;
 }
 
 .activity-screen .summary-white {
@@ -3091,12 +3092,23 @@ button:disabled {
 }
 
 .activity-screen .summary-white::before {
-  content: "";
+  content: none;
+}
+
+.summary-points-icon {
   width: 40px;
   height: 40px;
+  margin: 0;
   border-radius: 999px;
-  display: block;
+  display: grid;
+  place-items: center;
   background: #c9ead9;
+}
+
+.summary-points-icon img {
+  width: 22px;
+  height: 16px;
+  object-fit: contain;
 }
 
 .activity-screen .summary-green span {
@@ -3234,6 +3246,34 @@ button:disabled {
   min-height: 136px;
   padding: 32px 24px 24px;
   border-radius: 48px;
+  position: relative;
+  overflow: hidden;
+  background: #191c1e;
+}
+
+.activity-screen .reward-banner-image {
+  position: absolute;
+  left: 0;
+  top: -114px;
+  width: 100%;
+  height: 364px;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.activity-screen .reward-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(25, 28, 30, 0.72), rgba(25, 28, 30, 0.24));
+  pointer-events: none;
+}
+
+.activity-screen .reward-banner-copy {
+  position: relative;
+  z-index: 1;
 }
 
 .activity-screen .reward-banner h2 {
@@ -3330,29 +3370,43 @@ button:disabled {
   min-height: 108px;
   padding: 4px;
   border-radius: 32px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
   background: linear-gradient(90deg, #006d38, #00aa5b);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-.activity-detail-screen .points-card > div {
+.activity-detail-screen .points-card-inner {
+  width: 100%;
+  min-height: 100px;
+  padding: 24px;
+  border-radius: 28.8px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
+}
+
+.activity-detail-screen .points-copy {
   flex: 1;
 }
 
-.points-star {
+.activity-detail-screen .points-star {
   width: 48px;
   height: 48px;
-  margin-left: 20px;
+  margin: 0;
   border-radius: 999px;
   display: grid;
   place-items: center;
-  color: #ffffff;
   background: rgba(255, 255, 255, 0.2);
 }
 
-.activity-detail-screen .points-card span:not(.points-star) {
+.activity-detail-screen .points-star img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.activity-detail-screen .points-copy span {
   display: block;
   color: rgba(255, 255, 255, 0.8);
   font-size: 14px;
@@ -3368,9 +3422,25 @@ button:disabled {
   font-weight: 800;
 }
 
-.activity-detail-screen .points-card > svg {
-  margin-right: 20px;
+.activity-detail-screen .points-card svg {
   color: rgba(255, 255, 255, 0.6);
+  flex: 0 0 auto;
+}
+
+.activity-detail-screen .points-card span:not(.points-star):not(.summary-points-icon) {
+  margin-bottom: 0;
+}
+
+.activity-detail-screen .points-card .points-star {
+  margin-bottom: 0;
+}
+
+.activity-detail-screen .points-card .points-star + .points-copy {
+  margin-bottom: 0;
+}
+
+.activity-detail-screen .points-card .points-card-inner > * {
+  margin-bottom: 0;
 }
 
 .activity-detail-screen .detail-info {
