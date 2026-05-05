@@ -1,0 +1,55 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 142 231" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Vertical Reference Box &#38; Bottle Silhouette 1" clip-path="url(#clip0_0_12)">
+<path id="Vector" d="M103.769 6.53125H38.2308C20.6984 6.53125 6.48558 20.8441 6.48558 38.5V192.5C6.48558 210.156 20.6984 224.469 38.2308 224.469H103.769C121.302 224.469 135.514 210.156 135.514 192.5V38.5C135.514 20.8441 121.302 6.53125 103.769 6.53125Z" stroke="var(--stroke-0, white)" stroke-opacity="0.6" stroke-width="3" stroke-dasharray="6 3"/>
+<g id="Group">
+<path id="Vector_2" d="M108.138 16.5H33.8615C21.7962 16.5 12.0154 26.3497 12.0154 38.5V192.5C12.0154 204.65 21.7962 214.5 33.8615 214.5H108.138C120.204 214.5 129.985 204.65 129.985 192.5V38.5C129.985 26.3497 120.204 16.5 108.138 16.5Z" fill="var(--fill-0, black)" fill-opacity="0.4"/>
+<path id="Vector_3" d="M108.138 17.1875H33.8615C22.1733 17.1875 12.6981 26.7294 12.6981 38.5V192.5C12.6981 204.271 22.1733 213.812 33.8615 213.812H108.138C119.827 213.812 129.302 204.271 129.302 192.5V38.5C129.302 26.7294 119.827 17.1875 108.138 17.1875Z" stroke="var(--stroke-0, white)" stroke-opacity="0.2" stroke-width="2"/>
+</g>
+<path id="Vector_4" d="M103.769 115.5C103.769 97.2746 89.0979 82.5 71 82.5C52.9021 82.5 38.2308 97.2746 38.2308 115.5C38.2308 133.725 52.9021 148.5 71 148.5C89.0979 148.5 103.769 133.725 103.769 115.5Z" fill="var(--fill-0, #006D38)" fill-opacity="0.2"/>
+<g id="Mask group">
+<mask id="mask0_0_12" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="22" height="22">
+<g id="Group_2">
+<path id="Vector_5" d="M0 22C0 9.84974 9.78086 0 21.8462 0V22H0Z" fill="var(--fill-0, white)"/>
+</g>
+</mask>
+<g mask="url(#mask0_0_12)">
+<path id="Vector_6" d="M-2.73077 22C-2.73077 8.33092 8.27266 -2.75 21.8462 -2.75V2.75C11.289 2.75 2.73077 11.3685 2.73077 22H-2.73077ZM-2.73077 22C-2.73077 8.33092 8.27266 -2.75 21.8462 -2.75V2.75C11.289 2.75 2.73077 11.3685 2.73077 22H-2.73077Z" fill="var(--fill-0, #006D38)"/>
+</g>
+</g>
+<g id="Mask group_2">
+<mask id="mask1_0_12" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="120" y="0" width="22" height="22">
+<g id="Group_3">
+<path id="Vector_7" d="M120.154 0C132.219 0 142 9.84974 142 22H120.154V0Z" fill="var(--fill-0, white)"/>
+</g>
+</mask>
+<g mask="url(#mask1_0_12)">
+<path id="Vector_8" d="M120.154 -2.75C133.727 -2.75 144.731 8.33092 144.731 22H139.269C139.269 11.3685 130.711 2.75 120.154 2.75V-2.75ZM120.154 -2.75C133.727 -2.75 144.731 8.33092 144.731 22H139.269C139.269 11.3685 130.711 2.75 120.154 2.75V-2.75Z" fill="var(--fill-0, #006D38)"/>
+</g>
+</g>
+<g id="Mask group_3">
+<mask id="mask2_0_12" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="209" width="22" height="22">
+<g id="Group_4">
+<path id="Vector_9" d="M0 209H21.8462V231C9.78086 231 0 221.15 0 209Z" fill="var(--fill-0, white)"/>
+</g>
+</mask>
+<g mask="url(#mask2_0_12)">
+<path id="Vector_10" d="M21.8462 233.75C8.27266 233.75 -2.73077 222.669 -2.73077 209H2.73077C2.73077 219.631 11.289 228.25 21.8462 228.25V233.75ZM21.8462 233.75C8.27266 233.75 -2.73077 222.669 -2.73077 209H2.73077C2.73077 219.631 11.289 228.25 21.8462 228.25V233.75Z" fill="var(--fill-0, #006D38)"/>
+</g>
+</g>
+<g id="Mask group_4">
+<mask id="mask3_0_12" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="120" y="209" width="22" height="22">
+<g id="Group_5">
+<path id="Vector_11" d="M120.154 209H142C142 221.15 132.219 231 120.154 231V209Z" fill="var(--fill-0, white)"/>
+</g>
+</mask>
+<g mask="url(#mask3_0_12)">
+<path id="Vector_12" d="M144.731 209C144.731 222.669 133.727 233.75 120.154 233.75V228.25C130.711 228.25 139.269 219.631 139.269 209H144.731ZM144.731 209C144.731 222.669 133.727 233.75 120.154 233.75V228.25C130.711 228.25 139.269 219.631 139.269 209H144.731Z" fill="var(--fill-0, #006D38)"/>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_0_12">
+<rect width="142" height="231" fill="white"/>
+</clipPath>
+</defs>
+</svg>

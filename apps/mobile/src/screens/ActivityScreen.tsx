@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from "react";
-import { ArrowLeft, CalendarDays, Check, ChevronRight, Download, MapPin, ReceiptText, Share2, Star } from "lucide-react";
+import { ArrowLeft, CalendarDays, Check, ChevronRight, Download, MapPin, ReceiptText, Share2 } from "lucide-react";
 import type { DepositTransaction } from "@ecodrop/shared";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { TransactionItem } from "../components/TransactionItem";
@@ -10,9 +10,10 @@ type ActivityScreenProps = {
   selected: DepositTransaction | null;
   onSelect: (transaction: DepositTransaction) => void;
   onBack: () => void;
+  onOpenReward: () => void;
 };
 
-export function ActivityScreen({ transactions, selected, onSelect, onBack }: ActivityScreenProps) {
+export function ActivityScreen({ transactions, selected, onSelect, onBack, onOpenReward }: ActivityScreenProps) {
   useEffect(() => {
     document.querySelector(".activity-content")?.scrollTo({ top: 0 });
   }, [selected]);
@@ -31,11 +32,15 @@ export function ActivityScreen({ transactions, selected, onSelect, onBack }: Act
       </header>
       <section className="activity-summary">
         <div className="summary-green">
+          <img className="summary-scan-deco" src={figmaAssets.activityScanDeco} alt="" />
           <span>Scan Berhasil</span>
           <strong>{successCount || 42}</strong>
           <small>Total botol didaur ulang</small>
         </div>
         <div className="summary-white">
+          <span className="summary-points-icon">
+            <img src={figmaAssets.activityPointsIcon} alt="" />
+          </span>
           <span>Total Poin</span>
           <strong>{totalPoints || 2450}</strong>
         </div>
@@ -62,15 +67,13 @@ export function ActivityScreen({ transactions, selected, onSelect, onBack }: Act
           ))}
         </div>
       </section>
-      <section
-        className="reward-banner"
-        style={{
-          backgroundImage: `linear-gradient(90deg, rgba(2, 32, 22, 0.88), rgba(2, 32, 22, 0.42)), url(${figmaAssets.rewardForestBg})`
-        }}
-      >
-        <h2>Tukar 5.000 Poin!</h2>
-        <p>Dapatkan tote bag EcoDrop eksklusif</p>
-        <button>Klaim Sekarang</button>
+      <section className="reward-banner">
+        <img className="reward-banner-image" src={figmaAssets.activityRewardBanner} alt="" />
+        <div className="reward-banner-copy">
+          <h2>Tukar 5.000 Poin!</h2>
+          <p>Dapatkan tote bag EcoDrop eksklusif</p>
+          <button onClick={onOpenReward}>Klaim Sekarang</button>
+        </div>
       </section>
     </div>
   );
@@ -110,14 +113,16 @@ function ActivityDetail({ transaction, onBack }: { transaction: DepositTransacti
         </div>
       </section>
       <section className="points-card">
-        <span className="points-star">
-          <Star size={18} fill="currentColor" />
-        </span>
-        <div>
-          <span>Total Perolehan</span>
-          <strong>{transaction.points > 0 ? `+${transaction.points}` : "0"} Poin</strong>
+        <div className="points-card-inner">
+          <span className="points-star">
+            <img src={figmaAssets.activityDetailStar} alt="" />
+          </span>
+          <div className="points-copy">
+            <span>Total Perolehan</span>
+            <strong>{transaction.points > 0 ? `+${transaction.points}` : "0"} Poin</strong>
+          </div>
+          <ChevronRight size={18} />
         </div>
-        <ChevronRight size={18} />
       </section>
       <section className="detail-info">
         <h2>Informasi Transaksi</h2>

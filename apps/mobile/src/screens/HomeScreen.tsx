@@ -11,6 +11,8 @@ type HomeScreenProps = {
   onWithdraw: () => void;
   onOpenActivity: () => void;
   onOpenEducation: () => void;
+  onOpenWithdraw: () => void;
+  onOpenSmartBins: () => void;
   selectedSmartBin: SmartBin | null;
   onOpenSmartBin: (device: SmartBin) => void;
   onCloseSmartBin: () => void;
@@ -24,6 +26,8 @@ export function HomeScreen({
   onWithdraw,
   onOpenActivity,
   onOpenEducation,
+  onOpenWithdraw,
+  onOpenSmartBins,
   selectedSmartBin,
   onOpenSmartBin,
   onCloseSmartBin
@@ -42,14 +46,14 @@ export function HomeScreen({
         <div>
           <small>Nilai Konversi Rupiah</small>
           <b>≈ Rp {(user.points * 100).toLocaleString("id-ID")}</b>
-          <button onClick={onWithdraw}>Tarik Poin</button>
+          <button onClick={onOpenWithdraw}>Tarik Poin</button>
         </div>
       </section>
 
       <section className="home-card compact">
         <div className="section-row">
           <h2>Smart Bin Terdekat</h2>
-          <button>Lihat Semua</button>
+          <button onClick={onOpenSmartBins}>Lihat Semua</button>
         </div>
         <button className="smartbin-row" onClick={() => nearest && onOpenSmartBin(nearest)}>
           <img className="bin-illustration" src={figmaAssets.smartBinNearby} alt="" />

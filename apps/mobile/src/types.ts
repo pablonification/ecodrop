@@ -13,4 +13,12 @@ export type FlowStep =
 
 export type ProfileView = "main" | "edit" | "help" | "privacy";
 
+export type OverlayView =
+  | "withdraw"
+  | "withdrawal-history"
+  | "notifications"
+  | "support"
+  | "smartbins"
+  | "reward";
+
 export type WithdrawStep = "idle" | "amount" | "qris" | "success" | "failed";
