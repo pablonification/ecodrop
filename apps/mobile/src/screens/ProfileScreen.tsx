@@ -29,9 +29,10 @@ type ProfileScreenProps = {
   view: ProfileView;
   setView: (view: ProfileView) => void;
   onLogout: () => void;
+  onWithdraw: () => void;
 };
 
-export function ProfileScreen({ user, view, setView, onLogout }: ProfileScreenProps) {
+export function ProfileScreen({ user, view, setView, onLogout, onWithdraw }: ProfileScreenProps) {
   if (view !== "main") {
     return <ProfileSubView view={view} user={user} onBack={() => setView("main")} />;
   }
@@ -52,7 +53,7 @@ export function ProfileScreen({ user, view, setView, onLogout }: ProfileScreenPr
           <small>~ Rp {(user.points * 100).toLocaleString("id-ID")}</small>
         </div>
         <WalletCards size={21} />
-        <button>Tarik Poin</button>
+        <button onClick={onWithdraw}>Tarik Poin</button>
       </section>
 
       <span className="profile-section-label">Pengaturan Akun</span>

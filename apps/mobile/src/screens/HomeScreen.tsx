@@ -8,6 +8,7 @@ type HomeScreenProps = {
   devices: SmartBin[];
   transactions: DepositTransaction[];
   onStart: () => void;
+  onWithdraw: () => void;
   onOpenActivity: () => void;
   onOpenEducation: () => void;
   selectedSmartBin: SmartBin | null;
@@ -20,6 +21,7 @@ export function HomeScreen({
   devices,
   transactions,
   onStart,
+  onWithdraw,
   onOpenActivity,
   onOpenEducation,
   selectedSmartBin,
@@ -40,7 +42,7 @@ export function HomeScreen({
         <div>
           <small>Nilai Konversi Rupiah</small>
           <b>≈ Rp {(user.points * 100).toLocaleString("id-ID")}</b>
-          <button>Tarik Poin</button>
+          <button onClick={onWithdraw}>Tarik Poin</button>
         </div>
       </section>
 

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { ArrowLeft, Camera, CircleHelp, Image, Lightbulb, Recycle } from "lucide-react";
 
 type DepositCameraOverlayProps = {
@@ -6,6 +7,10 @@ type DepositCameraOverlayProps = {
   onInvalidDemo?: () => void;
   onBack?: () => void;
   primaryLabel: string;
+  qrContent?: ReactNode;
+  qrPanel?: ReactNode;
+  smartBinLabel?: string;
+  smartBinStatus?: string;
 };
 
 export function DepositCameraOverlay({
@@ -13,20 +18,28 @@ export function DepositCameraOverlay({
   onPrimary,
   onInvalidDemo,
   onBack,
-  primaryLabel
+  primaryLabel,
+  qrContent,
+  qrPanel,
+  smartBinLabel,
+  smartBinStatus
 }: DepositCameraOverlayProps) {
   return (
     <section className={mode === "qr" ? "camera-view qr" : "camera-view bottle"}>
       <div className="camera-feed" aria-hidden="true">
         {mode === "qr" ? (
-          <div className="mock-smartbin-qr">
-            <span>Taruh botol anda disini</span>
-            <div className="mock-qr-code">
-              {Array.from({ length: 49 }).map((_, index) => (
-                <i key={index} />
-              ))}
+          qrContent ? (
+            <div className="qr-live-feed">{qrContent}</div>
+          ) : (
+            <div className="mock-smartbin-qr">
+              <span>Taruh botol anda disini</span>
+              <div className="mock-qr-code">
+                {Array.from({ length: 49 }).map((_, index) => (
+                  <i key={index} />
+                ))}
+              </div>
             </div>
-          </div>
+          )
         ) : (
           <div className="mock-bottle-scene">
             <span className="mock-bottle-photo" />
@@ -46,6 +59,15 @@ export function DepositCameraOverlay({
 
       {mode === "qr" ? (
         <>
+          {smartBinLabel && (
+            <div className="qr-smartbin-chip">
+              <Recycle size={16} />
+              <div>
+                <small>Smart Bin</small>
+                <strong>{smartBinLabel} • {smartBinStatus ?? "Aktif"}</strong>
+              </div>
+            </div>
+          )}
           <button className="qr-window" onClick={onPrimary} aria-label={primaryLabel}>
             <span className="scan-line" />
           </button>
@@ -59,7 +81,7 @@ export function DepositCameraOverlay({
             <Recycle size={17} />
             <div>
               <small>Smart Bin</small>
-              <strong>Labtek V ITB • Aktif</strong>
+              <strong>{smartBinLabel ?? "Labtek V ITB"} • {smartBinStatus ?? "Aktif"}</strong>
             </div>
           </div>
           <div className="bottle-guide">
@@ -75,6 +97,8 @@ export function DepositCameraOverlay({
           </div>
         </>
       )}
+
+      {mode === "qr" && qrPanel && <div className="qr-panel">{qrPanel}</div>}
 
       <div className="camera-actions">
         <button className="round-glass" aria-label="Flash">

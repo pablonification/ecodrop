@@ -12,3 +12,5 @@ export type FlowStep =
   | "failed";
 
 export type ProfileView = "main" | "edit" | "help" | "privacy";
+
+export type WithdrawStep = "idle" | "amount" | "qris" | "success" | "failed";

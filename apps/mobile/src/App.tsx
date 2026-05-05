@@ -25,7 +25,8 @@ import { EducationScreen } from "./screens/EducationScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { LoginScreen } from "./screens/LoginScreen";
 import { ProfileScreen } from "./screens/ProfileScreen";
-import type { FlowStep, ProfileView, Tab } from "./types";
+import { WithdrawFlow } from "./screens/WithdrawFlow";
+import type { FlowStep, ProfileView, Tab, WithdrawStep } from "./types";
 
 const ACTIVE_DEPOSIT_STORAGE_KEY = "ecodrop.activeDeposit";
 const DEV_SESSION_STORAGE_KEY = "ecodrop.devSession";
@@ -44,6 +45,7 @@ export default function App() {
   const [selectedSmartBin, setSelectedSmartBin] = useState<SmartBin | null>(null);
   const [profileView, setProfileView] = useState<ProfileView>("main");
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem(DEV_SESSION_STORAGE_KEY) === "active");
+  const [withdrawStep, setWithdrawStep] = useState<WithdrawStep>("idle");
 
   const nearestBin = useMemo(() => devices[0] ?? demoSmartBins[0], [devices]);
   const isProfileSubView = tab === "profile" && profileView !== "main";
@@ -104,11 +106,13 @@ export default function App() {
     setProfileView("main");
     setFinalTransaction(null);
     setSession(null);
+    setWithdrawStep("idle");
     setFlow("qr");
   }
 
-  async function createSessionFromQr() {
-    const created = await createDepositSession(nearestBin.id);
+  async function createSessionFromQr(qrToken?: string) {
+    const token = qrToken ?? nearestBin.id;
+    const created = await createDepositSession(token);
     setSession(created);
     setFlow("capture");
   }
@@ -135,12 +139,17 @@ export default function App() {
     setIsLoggedIn(true);
   }
 
+  function startWithdraw() {
+    setWithdrawStep("amount");
+  }
+
   function logout() {
     localStorage.removeItem(DEV_SESSION_STORAGE_KEY);
     localStorage.removeItem(ACTIVE_DEPOSIT_STORAGE_KEY);
     setIsLoggedIn(false);
     setTab("home");
     setFlow("idle");
+    setWithdrawStep("idle");
     setProfileView("main");
     setSelectedArticle(null);
     setSelectedTransaction(null);
@@ -154,7 +163,28 @@ export default function App() {
       <section className="phone-frame">
         {!isLoggedIn ? (
           <LoginScreen onLogin={startDemoSession} />
-        ) : flow === "idle" ? (
+        ) : flow !== "idle" ? (
+          <DepositFlow
+            flow={flow}
+            setFlow={setFlow}
+            session={session}
+            setSession={setSession}
+            finalTransaction={finalTransaction}
+            setFinalTransaction={setFinalTransaction}
+            onCreateSession={createSessionFromQr}
+            onClose={() => closeDeposit("home")}
+            onDone={() => closeDeposit("home")}
+            devices={devices}
+          />
+        ) : withdrawStep !== "idle" ? (
+          <WithdrawFlow
+            user={user}
+            step={withdrawStep}
+            setStep={setWithdrawStep}
+            onClose={() => setWithdrawStep("idle")}
+            onDone={() => setWithdrawStep("idle")}
+          />
+        ) : (
           <>
             {!isProfileSubView && !isHomeBinDetail && !isEducationTab && !isActivityTab && <AppHeader />}
             <div
@@ -176,6 +206,7 @@ export default function App() {
                   devices={devices}
                   transactions={transactions}
                   onStart={startDeposit}
+                  onWithdraw={startWithdraw}
                   onOpenActivity={() => changeTab("activity")}
                   onOpenEducation={() => changeTab("education")}
                   selectedSmartBin={selectedSmartBin}
@@ -200,23 +231,17 @@ export default function App() {
                 />
               )}
               {tab === "profile" && (
-                <ProfileScreen user={user} view={profileView} setView={setProfileView} onLogout={logout} />
+                <ProfileScreen
+                  user={user}
+                  view={profileView}
+                  setView={setProfileView}
+                  onLogout={logout}
+                  onWithdraw={startWithdraw}
+                />
               )}
             </div>
             {!isProfileSubView && !isHomeBinDetail && !isEducationDetail && !isActivityDetail && <BottomNav tab={tab} setTab={changeTab} onStart={startDeposit} />}
           </>
-        ) : (
-          <DepositFlow
-            flow={flow}
-            setFlow={setFlow}
-            session={session}
-            setSession={setSession}
-            finalTransaction={finalTransaction}
-            setFinalTransaction={setFinalTransaction}
-            onCreateSession={createSessionFromQr}
-            onClose={() => closeDeposit("home")}
-            onDone={() => closeDeposit("home")}
-          />
         )}
       </section>
     </main>

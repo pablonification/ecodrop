@@ -1431,6 +1431,34 @@ button:disabled {
   padding-top: 36px;
 }
 
+.deposit-detecting {
+  min-height: 890px;
+}
+
+.deposit-detected {
+  min-height: 946px;
+}
+
+.deposit-insert {
+  min-height: 894.25px;
+}
+
+.deposit-success {
+  min-height: 1033.25px;
+  align-content: center;
+  padding-top: 0;
+}
+
+.deposit-failed {
+  min-height: 1033px;
+  align-content: center;
+  padding-top: 0;
+}
+
+.deposit-invalid {
+  min-height: 1170px;
+}
+
 .deposit-result.success {
   background:
     radial-gradient(circle at 50% 0%, rgba(0, 170, 91, 0.16), transparent 34%),
@@ -3786,6 +3814,446 @@ button:disabled {
 .mock-qr-code i:nth-child(37),
 .mock-qr-code i:nth-child(43) {
   background: #16211f;
+}
+
+.qr-live-feed {
+  position: absolute;
+  inset: 0;
+}
+
+.qr-scanner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.qr-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.qr-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  gap: 6px;
+  padding: 18px;
+  text-align: center;
+  color: #ffffff;
+  background: rgba(15, 23, 42, 0.65);
+  z-index: 2;
+}
+
+.qr-fallback strong {
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.qr-fallback span {
+  font-size: 12px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.qr-panel {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 190px;
+  z-index: 3;
+}
+
+.qr-panel-content {
+  padding: 16px;
+  border-radius: 24px;
+  display: grid;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.2);
+}
+
+.qr-smartbin-chip {
+  position: absolute;
+  top: 33px;
+  left: 84px;
+  right: 78px;
+  min-height: 42px;
+  padding: 4px 16px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(238, 252, 247, 0.78);
+  color: #0c1f18;
+  font-size: 12px;
+  font-weight: 700;
+  z-index: 4;
+  backdrop-filter: blur(8px);
+}
+
+.qr-smartbin-chip small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(12, 31, 24, 0.6);
+}
+
+.qr-smartbin-chip strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.qr-input {
+  display: grid;
+  gap: 8px;
+  color: #476557;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.qr-input input {
+  min-height: 44px;
+  border-radius: 16px;
+  border: 1px solid #dbe7df;
+  padding: 0 14px;
+  background: #f8fafc;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #191c1e;
+}
+
+.qr-error {
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.qr-hint {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.withdraw-flow {
+  min-height: 100%;
+  display: grid;
+  gap: 18px;
+  padding: 18px 24px calc(72px + env(safe-area-inset-bottom));
+  background: #f7f9fc;
+}
+
+.withdraw-card {
+  padding: 22px;
+  border-radius: 32px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  display: grid;
+  gap: 18px;
+}
+
+.withdraw-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #006d38;
+}
+
+.withdraw-card-header strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.withdraw-card-header span {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.withdraw-balance span {
+  color: #6d7b6e;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.withdraw-balance strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.withdraw-balance small {
+  display: block;
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.withdraw-input span {
+  color: #476557;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.withdraw-input input {
+  width: 100%;
+  margin-top: 8px;
+  min-height: 54px;
+  border: 1px solid #dbe7df;
+  border-radius: 18px;
+  padding: 0 16px;
+  background: #f8fafc;
+  font-size: 16px;
+  font-weight: 700;
+  color: #191c1e;
+}
+
+.withdraw-input small {
+  display: block;
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.withdraw-method {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 24px;
+  background: #f2f4f7;
+  color: #1e293b;
+}
+
+.withdraw-method strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.withdraw-method span {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.method-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: #006d38;
+  background: #e1ffef;
+}
+
+.withdraw-summary {
+  padding: 14px 18px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #006d38;
+  background: rgba(0, 109, 56, 0.12);
+  font-weight: 800;
+}
+
+.qris-scan-window {
+  height: 240px;
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #e2e8f0;
+  background: #0f1714;
+}
+
+.qris-scan-window .scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 2;
+}
+
+.qris-status {
+  padding: 14px 18px;
+  border-radius: 20px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  display: grid;
+  gap: 4px;
+}
+
+.qris-status.success {
+  border-color: rgba(0, 109, 56, 0.2);
+  background: #ecfdf5;
+}
+
+.qris-status strong {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.qris-status span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.withdraw-actions {
+  display: grid;
+  gap: 12px;
+  padding-bottom: 32px;
+}
+
+.withdraw-result {
+  min-height: 100%;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 18px;
+  text-align: center;
+  padding: 24px;
+  background: #f7f9fc;
+}
+
+.withdraw-result.success .result-icon {
+  color: #ffffff;
+  background: #00aa5b;
+}
+
+.withdraw-result.failed .result-icon {
+  color: #ffffff;
+  background: #dc2626;
+}
+
+.withdraw-result.failed .points-total {
+  color: #94a3b8;
+}
+
+.withdraw-receipt {
+  width: 100%;
+  padding: 18px;
+  border-radius: 24px;
+  display: grid;
+  gap: 12px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.withdraw-receipt small {
+  display: block;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.withdraw-receipt strong {
+  display: block;
+  margin-top: 4px;
+  color: #1e293b;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.share-sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.48);
+  display: grid;
+  align-items: end;
+  z-index: 40;
+}
+
+.share-sheet {
+  background: #ffffff;
+  border-radius: 32px 32px 0 0;
+  padding: 24px;
+  display: grid;
+  gap: 16px;
+  box-shadow: 0 -18px 40px rgba(15, 23, 42, 0.2);
+}
+
+.share-sheet header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.share-sheet header span {
+  display: block;
+  color: #8b9b93;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.share-sheet header strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.share-sheet header button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  display: grid;
+  place-items: center;
+}
+
+.share-options {
+  display: grid;
+  gap: 12px;
+}
+
+.share-options button {
+  min-height: 50px;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  text-align: left;
+  padding: 0 16px;
+}
+
+.share-message {
+  margin: 0;
+  color: #006d38;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
 }
 
 .mock-bottle-scene {

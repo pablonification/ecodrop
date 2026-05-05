@@ -1,6 +1,9 @@
-import { ArrowLeft, Clock3, Search, Share2 } from "lucide-react";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { ArrowLeft, Clock3, Download, Link2, Search, Send, Share2, X } from "lucide-react";
 import type { EducationArticle } from "@ecodrop/shared";
 import { figmaAssets } from "../assets/figma";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 type EducationScreenProps = {
   articles: EducationArticle[];
@@ -34,9 +37,90 @@ const educationCards = [
 
 export function EducationScreen({ articles, selected, onSelect, onBack }: EducationScreenProps) {
   const fallbackArticle = articles[0];
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareMessage, setShareMessage] = useState<string | null>(null);
+  const articleRef = useRef<HTMLElement | null>(null);
+  const shareArticle = selected ?? fallbackArticle;
+  const shareUrl = useMemo(
+    () => (shareArticle ? `https://ecodrop.app/education/${shareArticle.id}` : "https://ecodrop.app/education"),
+    [shareArticle]
+  );
+
+  useEffect(() => {
+    if (!selected) setShareOpen(false);
+  }, [selected]);
+
+  async function handleCopyLink() {
+    if (!shareArticle) return;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setShareMessage("Tautan berhasil disalin.");
+    } catch {
+      setShareMessage("Gagal menyalin tautan.");
+    }
+  }
+
+  async function handleNativeShare() {
+    if (!shareArticle) return;
+    const share = (navigator as Navigator & {
+      share?: (data: { title?: string; text?: string; url?: string }) => Promise<void>;
+    }).share;
+    if (share) {
+      try {
+        await share({
+          title: shareArticle.title,
+          text: shareArticle.excerpt,
+          url: shareUrl
+        });
+        setShareMessage("Bagikan artikel berhasil.");
+        return;
+      } catch {
+        setShareMessage("Bagikan artikel dibatalkan.");
+        return;
+      }
+    }
+    await handleCopyLink();
+  }
+
+  async function handleDownload() {
+    if (!shareArticle) return;
+    const target = articleRef.current;
+    if (!target) {
+      setShareMessage("Gagal membuat PDF.");
+      return;
+    }
+    try {
+      await exportArticlePdf(target, shareArticle.title);
+      setShareMessage("Ringkasan artikel diunduh.");
+    } catch {
+      setShareMessage("Gagal membuat PDF.");
+    }
+  }
 
   if (selected) {
-    return <ArticleDetailView onBack={onBack} />;
+    return (
+      <>
+        <ArticleDetailView
+          article={selected}
+          onBack={onBack}
+          onShare={() => {
+            setShareOpen(true);
+            setShareMessage(null);
+          }}
+          contentRef={articleRef}
+        />
+        {shareOpen && shareArticle && (
+          <ShareSheet
+            article={shareArticle}
+            message={shareMessage}
+            onClose={() => setShareOpen(false)}
+            onCopyLink={handleCopyLink}
+            onDownload={handleDownload}
+            onShare={handleNativeShare}
+          />
+        )}
+      </>
+    );
   }
 
   return (
@@ -83,15 +167,25 @@ export function EducationScreen({ articles, selected, onSelect, onBack }: Educat
   );
 }
 
-function ArticleDetailView({ onBack }: { onBack: () => void }) {
+function ArticleDetailView({
+  article,
+  onBack,
+  onShare,
+  contentRef
+}: {
+  article: EducationArticle;
+  onBack: () => void;
+  onShare: () => void;
+  contentRef: RefObject<HTMLElement | null>;
+}) {
   return (
-    <article className="article-detail-screen">
+    <article className="article-detail-screen" ref={contentRef}>
       <header className="article-detail-topbar">
         <button onClick={onBack} aria-label="Kembali">
           <ArrowLeft size={16} />
         </button>
         <h1>Detail Artikel</h1>
-        <button aria-label="Bagikan artikel">
+        <button aria-label="Bagikan artikel" onClick={onShare}>
           <Share2 size={18} />
         </button>
       </header>
@@ -106,7 +200,7 @@ function ArticleDetailView({ onBack }: { onBack: () => void }) {
             3 Min Baca
           </small>
         </div>
-        <h2>Manfaat Daur Ulang untuk Lingkungan Masa Depan</h2>
+        <h2>{article.title}</h2>
         <div className="article-author">
           <span>
             <img src={figmaAssets.articleNoteIcon} alt="" />
@@ -119,11 +213,7 @@ function ArticleDetailView({ onBack }: { onBack: () => void }) {
       </section>
 
       <section className="article-body">
-        <p className="lead">
-          Daur ulang bukan hanya sekadar tren, melainkan sebuah kebutuhan mendesak untuk menjaga kelestarian bumi. Dengan
-          mendaur ulang, kita tidak hanya mengurangi tumpukan sampah, tetapi juga menyelamatkan sumber daya alam yang semakin
-          menipis.
-        </p>
+        <p className="lead">{article.excerpt}</p>
 
         <h3>Mengapa Kita Harus Mulai Sekarang?</h3>
         <p>
@@ -149,11 +239,7 @@ function ArticleDetailView({ onBack }: { onBack: () => void }) {
         </aside>
 
         <h3>Dampak Nyata yang Anda Buat</h3>
-        <p>
-          Melalui platform EcoDrop, kontribusi kecil Anda tercatat dan memberikan dampak nyata. Setiap poin yang Anda kumpulkan
-          mencerminkan jumlah karbon yang berhasil dicegah untuk mencemari udara kita. Mari jadikan daur ulang sebagai gaya
-          hidup.
-        </p>
+        <p>{article.content}</p>
       </section>
 
       <section className="related-articles">
@@ -179,4 +265,80 @@ function RelatedCard({ image, label, title, time }: { image: string; label: stri
       <small>{time}</small>
     </article>
   );
+}
+
+function ShareSheet({
+  article,
+  message,
+  onClose,
+  onCopyLink,
+  onDownload,
+  onShare
+}: {
+  article: EducationArticle;
+  message: string | null;
+  onClose: () => void;
+  onCopyLink: () => void;
+  onDownload: () => void;
+  onShare: () => void;
+}) {
+  return (
+    <div className="share-sheet-backdrop" onClick={onClose}>
+      <section className="share-sheet" onClick={(event) => event.stopPropagation()}>
+        <header>
+          <div>
+            <span>Bagikan Artikel</span>
+            <strong>{article.title}</strong>
+          </div>
+          <button onClick={onClose} aria-label="Tutup">
+            <X size={18} />
+          </button>
+        </header>
+        <div className="share-options">
+          <button onClick={onShare}>
+            <Send size={18} />
+            Bagikan
+          </button>
+          <button onClick={onCopyLink}>
+            <Link2 size={18} />
+            Salin Tautan
+          </button>
+          <button onClick={onDownload}>
+            <Download size={18} />
+            Unduh Ringkasan
+          </button>
+        </div>
+        {message && <p className="share-message">{message}</p>}
+      </section>
+    </div>
+  );
+}
+
+async function exportArticlePdf(element: HTMLElement, title: string): Promise<void> {
+  const canvas = await html2canvas(element, {
+    scale: 2,
+    backgroundColor: "#f8fafc",
+    useCORS: true
+  });
+  const imageData = canvas.toDataURL("image/png");
+  const pdf = new jsPDF({ orientation: "p", unit: "pt", format: "a4" });
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const imgWidth = pageWidth;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  let remainingHeight = imgHeight;
+  let position = 0;
+
+  pdf.addImage(imageData, "PNG", 0, position, imgWidth, imgHeight);
+  remainingHeight -= pageHeight;
+
+  while (remainingHeight > 0) {
+    pdf.addPage();
+    position = -(imgHeight - remainingHeight);
+    pdf.addImage(imageData, "PNG", 0, position, imgWidth, imgHeight);
+    remainingHeight -= pageHeight;
+  }
+
+  const safeTitle = title.replace(/\s+/g, "-").toLowerCase();
+  pdf.save(`${safeTitle}.pdf`);
 }
