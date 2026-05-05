@@ -1,4 +1,5 @@
-import { ArrowLeft, Camera, CircleHelp, Image, Lightbulb, Recycle } from "lucide-react";
+import { ArrowLeft, CircleHelp, Image, Lightbulb } from "lucide-react";
+import { figmaAssets } from "../assets/figma";
 
 type DepositCameraOverlayProps = {
   mode: "qr" | "bottle";
@@ -29,8 +30,8 @@ export function DepositCameraOverlay({
           </div>
         ) : (
           <div className="mock-bottle-scene">
-            <span className="mock-bottle-photo" />
-            <span className="mock-reference-photo" />
+            <img className="deposit-camera-bg-texture" src={figmaAssets.depositCameraBgTexture} alt="" />
+            <img className="deposit-camera-photo" src={figmaAssets.depositCameraPhoto} alt="" />
           </div>
         )}
       </div>
@@ -38,10 +39,10 @@ export function DepositCameraOverlay({
       <div className="camera-gradient bottom" />
 
       <button className="round-glass top-left" onClick={onBack} aria-label="Kembali">
-        <ArrowLeft size={25} />
+        {mode === "bottle" ? <img src={figmaAssets.depositBackIcon} alt="" /> : <ArrowLeft size={25} />}
       </button>
       <button className="round-glass top-right" aria-label="Bantuan">
-        <CircleHelp size={21} />
+        {mode === "bottle" ? <img src={figmaAssets.depositHelpIcon} alt="" /> : <CircleHelp size={21} />}
       </button>
 
       {mode === "qr" ? (
@@ -56,21 +57,37 @@ export function DepositCameraOverlay({
       ) : (
         <>
           <div className="smartbin-chip">
-            <Recycle size={17} />
+            <img className="smartbin-chip-icon" src={figmaAssets.depositRecycleIcon} alt="" />
             <div>
               <small>Smart Bin</small>
-              <strong>Labtek V ITB • Aktif</strong>
+              <strong>
+                Labtek V ITB • <em>Aktif</em>
+              </strong>
             </div>
           </div>
           <div className="bottle-guide">
-            <span className="bottle-outline" />
-            <span className="reference-plate" />
+            <img className="deposit-bottle-overlay" src={figmaAssets.depositBottleOverlay} alt="" />
+            <img className="deposit-reference-overlay" src={figmaAssets.depositReferenceOverlay} alt="" />
+          </div>
+          <div className="level-indicator" aria-hidden="true">
+            <span className="level-track">
+              <i />
+            </span>
+            <span className="level-ruler" />
           </div>
           <div className="camera-copy bottle-copy">
             <ol>
-              <li>Letakkan 1 botol di atas kotak referensi hitam</li>
-              <li>Pastikan kotak dan botol diposisikan pas sesuai dengan area panduan</li>
-              <li>Ambil gambar dari atas secara tegak lurus</li>
+              <li>
+                <span>
+                  Letakkan 1 botol di atas <strong>kotak referensi hitam</strong>
+                </span>
+              </li>
+              <li>
+                <span>Pastikan kotak dan botol diposisikan pas sesuai dengan area panduan</span>
+              </li>
+              <li>
+                <span>Ambil gambar dari atas secara tegak lurus</span>
+              </li>
             </ol>
           </div>
         </>
@@ -78,17 +95,17 @@ export function DepositCameraOverlay({
 
       <div className="camera-actions">
         <button className="round-glass" aria-label="Flash">
-          <Lightbulb size={18} />
+          {mode === "bottle" ? <img src={figmaAssets.depositFlashIcon} alt="" /> : <Lightbulb size={18} />}
         </button>
         {mode === "bottle" ? (
           <button className="capture-shutter" onClick={onPrimary} aria-label={primaryLabel}>
-            <Camera size={30} />
+            <img src={figmaAssets.depositCameraIcon} alt="" />
           </button>
         ) : (
           <span className="camera-action-spacer" aria-hidden="true" />
         )}
         <button className="round-glass" onClick={mode === "bottle" ? onPrimary : undefined} aria-label="Galeri">
-          <Image size={18} />
+          {mode === "bottle" ? <img src={figmaAssets.depositGalleryIcon} alt="" /> : <Image size={18} />}
         </button>
       </div>
 

@@ -1,5 +1,15 @@
 import aquaBottle from "./aqua-bottle.png";
 import binMap from "./bin-map.png";
+import depositBackIcon from "./deposit-back-icon.svg";
+import depositBottleOverlay from "./deposit-bottle-overlay.svg";
+import depositCameraBgTexture from "./deposit-camera-bg-texture.png";
+import depositCameraIcon from "./deposit-camera-icon.svg";
+import depositCameraPhoto from "./deposit-camera-photo.png";
+import depositFlashIcon from "./deposit-flash-icon.svg";
+import depositGalleryIcon from "./deposit-gallery-icon.svg";
+import depositHelpIcon from "./deposit-help-icon.svg";
+import depositRecycleIcon from "./deposit-recycle-icon.svg";
+import depositReferenceOverlay from "./deposit-reference-overlay.svg";
 import ecodropLogo from "./ecodrop-transparent.svg";
 import educationThumb1 from "./education-thumb-1.png";
 import educationThumb2 from "./education-thumb-2.png";
@@ -36,6 +46,16 @@ export const figmaAssets = {
   activityRewardBanner,
   activityScanDeco,
   binMap,
+  depositBackIcon,
+  depositBottleOverlay,
+  depositCameraBgTexture,
+  depositCameraIcon,
+  depositCameraPhoto,
+  depositFlashIcon,
+  depositGalleryIcon,
+  depositHelpIcon,
+  depositRecycleIcon,
+  depositReferenceOverlay,
   ecodropLogo,
   educationFeatured,
   educationRecycling: [educationRecycling1, educationRecycling2, educationRecycling2, educationRecycling2],

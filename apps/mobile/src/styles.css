@@ -3789,21 +3789,40 @@ button:disabled {
 }
 
 .camera-view.bottle .camera-feed {
-  background:
-    radial-gradient(circle at 68% 38%, rgba(76, 203, 224, 0.28), transparent 24%),
-    linear-gradient(130deg, #0c6f7e 0%, #0c8baa 48%, #074c61 100%);
+  background: #073344;
 }
 
-.camera-view.bottle .camera-feed::before {
+.camera-view.bottle .camera-feed::before,
+.camera-view.bottle .camera-feed::after {
+  display: none;
+}
+
+.deposit-camera-bg-texture {
+  position: absolute;
+  top: 0;
+  left: -247px;
+  width: 884px;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.55;
+}
+
+.deposit-camera-photo {
+  position: absolute;
+  left: -37px;
+  top: 0;
+  width: 503px;
+  height: 895px;
+  object-fit: cover;
+  opacity: 0.98;
+}
+
+.camera-view.bottle .camera-feed .mock-bottle-scene::after {
   content: "";
   position: absolute;
   inset: 0;
-  opacity: 0.45;
-  background:
-    radial-gradient(circle at 22% 28%, rgba(255, 255, 255, 0.25) 0 2px, transparent 3px),
-    radial-gradient(circle at 72% 30%, rgba(6, 41, 47, 0.4) 0 2px, transparent 3px),
-    linear-gradient(105deg, transparent 0 54%, rgba(255, 255, 255, 0.12) 55% 56%, transparent 57%);
-  background-size: 58px 72px, 64px 78px, auto;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(1px);
 }
 
 .mock-smartbin-qr {
@@ -3865,15 +3884,7 @@ button:disabled {
 }
 
 .mock-bottle-scene::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 138px;
-  height: 88px;
-  background:
-    repeating-linear-gradient(90deg, rgba(97, 62, 30, 0.7) 0 13px, rgba(147, 99, 52, 0.72) 13px 26px),
-    #8c623a;
+  content: none;
 }
 
 .mock-bottle-photo {
@@ -3931,11 +3942,13 @@ button:disabled {
 .round-glass.top-left,
 .round-glass.top-right {
   position: absolute;
-  top: 33px;
+  top: 32px;
   z-index: 5;
   color: #0c1f18;
-  background: rgba(238, 252, 247, 0.78);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(188, 202, 188, 0.15);
   backdrop-filter: blur(10px);
+  box-shadow: 0 12px 32px -4px rgba(25, 28, 30, 0.06);
 }
 
 .round-glass.top-left {
@@ -3944,6 +3957,16 @@ button:disabled {
 
 .round-glass.top-right {
   right: 24px;
+}
+
+.round-glass.top-left img {
+  width: 16px;
+  height: 16px;
+}
+
+.round-glass.top-right img {
+  width: 24px;
+  height: 24px;
 }
 
 .qr-window {
@@ -3955,23 +3978,29 @@ button:disabled {
 
 .smartbin-chip {
   min-height: 48px;
-  padding: 0 21px;
+  padding: 4px 15px;
   position: absolute;
-  top: 33px;
-  left: 84px;
-  right: 78px;
+  top: 32px;
+  left: 81px;
+  width: 228px;
   z-index: 4;
-  border-radius: 999px;
+  border: 1px solid rgba(188, 202, 188, 0.15);
+  border-radius: 32px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 11px;
+  justify-content: flex-start;
+  gap: 6px;
   color: #0c1f18;
-  background: rgba(238, 252, 247, 0.78);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1), 0 8px 10px rgba(0, 0, 0, 0.1);
 }
 
-.smartbin-chip svg {
-  color: #008b4d;
+.smartbin-chip-icon {
+  width: 40px;
+  height: 40px;
+  padding: 9.5px;
+  object-fit: contain;
 }
 
 .smartbin-chip small,
@@ -3980,88 +4009,96 @@ button:disabled {
 }
 
 .smartbin-chip small {
-  color: #008b4d;
-  font-size: 9px;
-  line-height: 12px;
-  font-weight: 900;
-  letter-spacing: 1.2px;
+  color: #006d38;
+  font-size: 10px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
 .smartbin-chip strong {
-  color: #0f2a20;
+  color: #191c1e;
   font-size: 14px;
-  line-height: 17px;
-  font-weight: 900;
+  line-height: 24px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.smartbin-chip em {
+  color: #006d38;
+  font-style: normal;
 }
 
 .bottle-guide {
-  width: 156px;
-  height: 330px;
-  position: absolute;
-  left: calc(50% - 78px);
-  top: 173px;
-}
-
-.bottle-outline {
-  width: 48px;
-  height: 148px;
-  position: absolute;
-  left: 54px;
-  top: 0;
-  border: 3px solid rgba(118, 252, 163, 0.76);
-  border-radius: 19px 19px 13px 13px;
-  box-shadow: 0 0 22px rgba(118, 252, 163, 0.28);
-}
-
-.bottle-outline::before {
-  width: 25px;
-  height: 22px;
-  left: 8px;
-  top: -23px;
-  border-width: 3px;
-  border-color: rgba(118, 252, 163, 0.76);
-}
-
-.reference-plate {
   width: 142px;
-  height: 190px;
-  left: 7px;
-  bottom: 0;
-  border: 3px solid rgba(255, 255, 255, 0.78);
-  border-radius: 30px;
-  background: rgba(0, 0, 0, 0.2);
-  outline: 2px dashed rgba(255, 255, 255, 0.72);
-  outline-offset: -12px;
-}
-
-.reference-plate::before,
-.reference-plate::after {
-  content: "";
+  height: 399px;
   position: absolute;
-  width: 44px;
-  height: 44px;
-  border: 5px solid #008b4d;
-  border-radius: 18px;
+  left: 124px;
+  top: 200px;
+  z-index: 2;
 }
 
-.reference-plate::before {
-  left: -11px;
-  top: -11px;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
+.deposit-bottle-overlay {
+  width: 139px;
+  height: 180px;
+  position: absolute;
+  left: 1px;
+  top: 0;
+  object-fit: contain;
 }
 
-.reference-plate::after {
-  right: -11px;
-  bottom: -11px;
-  border-left-color: transparent;
-  border-top-color: transparent;
+.deposit-reference-overlay {
+  width: 142px;
+  height: 231px;
+  position: absolute;
+  left: 0;
+  top: 168px;
+  object-fit: contain;
+}
+
+.level-indicator {
+  position: absolute;
+  top: 357px;
+  right: 24px;
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+}
+
+.level-track {
+  width: 4px;
+  height: 128px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.level-track i {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffff;
+  border-radius: 999px;
+  background: #006d38;
+  box-shadow: 0 0 10px rgba(0, 170, 91, 0.6);
+}
+
+.level-ruler {
+  width: 17px;
+  height: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.72);
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+  opacity: 0.88;
 }
 
 .camera-copy.bottle-copy {
-  bottom: 126px;
+  bottom: 130px;
   max-width: 342px;
+  text-align: left;
 }
 
 .camera-copy.bottle-copy ol {
@@ -4073,11 +4110,13 @@ button:disabled {
 .camera-copy.bottle-copy li {
   counter-increment: step;
   display: grid;
-  grid-template-columns: 28px 1fr;
-  gap: 13px;
+  grid-template-columns: 24px 1fr;
+  gap: 16px;
   align-items: start;
   font-size: 14px;
-  line-height: 21px;
+  line-height: 22.75px;
+  font-weight: 400;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.18);
 }
 
 .camera-copy.bottle-copy li::before {
@@ -4093,28 +4132,53 @@ button:disabled {
   font-weight: 800;
 }
 
+.camera-copy.bottle-copy strong {
+  display: inline;
+  font-weight: 700;
+}
+
 .round-glass {
   background: rgba(15, 23, 22, 0.45);
   backdrop-filter: blur(10px);
 }
 
+.camera-view.bottle .round-glass:not(.top-left):not(.top-right) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.round-glass img {
+  display: block;
+  object-fit: contain;
+}
+
+.camera-view.bottle .camera-actions .round-glass img {
+  max-width: 20px;
+  max-height: 20px;
+}
+
 .capture-shutter {
-  width: 76px;
-  height: 76px;
-  border: 4px solid rgba(255, 255, 255, 0.7);
+  width: 64px;
+  height: 64px;
+  border: 0;
   border-radius: 999px;
   justify-self: center;
   display: grid;
   place-items: center;
   color: #ffffff;
   background: #00aa5b;
-  box-shadow: 0 0 0 6px rgba(0, 170, 91, 0.18);
+  box-shadow: 0 0 10px rgba(0, 170, 91, 0.5), 0 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.capture-shutter img {
+  width: 25px;
+  height: 23px;
+  object-fit: contain;
 }
 
 .invalid-demo-action {
   position: absolute;
-  right: 18px;
-  bottom: 101px;
+  right: 24px;
+  bottom: 103px;
   z-index: 6;
   border: 0;
   padding: 7px 10px;
