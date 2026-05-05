@@ -20,6 +20,20 @@ The task document describes WebSocket Secure for low-latency commands. This scaf
 
 Use a separate 5V 3A supply for the servo and connect grounds between the ESP32 and servo supply.
 
+## Arduino IDE Setup
+
+Before flashing, copy `src/secrets.example.h` to `src/secrets.h` and fill in
+the Wi-Fi SSID and password:
+
+```cpp
+#define ECODROP_WIFI_SSID "your-wifi-name"
+#define ECODROP_WIFI_PASSWORD "your-wifi-password"
+```
+
+The example file already points to the VPS demo backend at
+`http://139.59.245.101:8000` with device ID `ECO-SMARTBIN-001` and token
+`dev-device-token`.
+
 ## Backend Contract
 
 - `POST /api/iot/devices/register`

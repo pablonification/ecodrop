@@ -21,6 +21,7 @@ __pycache__/
 .pio/
 *.bin
 *.elf
+iot/smartbin-esp32/src/secrets.h
 
 debug_images/
 uploads/

@@ -4,6 +4,10 @@
 #include <HTTPClient.h>
 #include <WiFi.h>
 
+#if __has_include("secrets.h")
+#include "secrets.h"
+#endif
+
 /*
  * HARDWARE WIRING RULES:
  * - Servo MG996R MUST use external 5V power, not ESP32 3.3V.
@@ -11,12 +15,31 @@
  * - Keep fail-safe default: lid closed.
  */
 
-// Update these values before flashing.
-const char* WIFI_SSID = "YOUR_WIFI_SSID";
-const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
-const char* BACKEND_BASE_URL = "http://139.59.245.101:8000";
-const char* DEVICE_ID = "ECO-SMARTBIN-001";
-const char* DEVICE_TOKEN = "dev-device-token";
+#ifndef ECODROP_WIFI_SSID
+#define ECODROP_WIFI_SSID "YOUR_WIFI_SSID"
+#endif
+
+#ifndef ECODROP_WIFI_PASSWORD
+#define ECODROP_WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
+#endif
+
+#ifndef ECODROP_BACKEND_BASE_URL
+#define ECODROP_BACKEND_BASE_URL "http://139.59.245.101:8000"
+#endif
+
+#ifndef ECODROP_DEVICE_ID
+#define ECODROP_DEVICE_ID "ECO-SMARTBIN-001"
+#endif
+
+#ifndef ECODROP_DEVICE_TOKEN
+#define ECODROP_DEVICE_TOKEN "dev-device-token"
+#endif
+
+const char* WIFI_SSID = ECODROP_WIFI_SSID;
+const char* WIFI_PASSWORD = ECODROP_WIFI_PASSWORD;
+const char* BACKEND_BASE_URL = ECODROP_BACKEND_BASE_URL;
+const char* DEVICE_ID = ECODROP_DEVICE_ID;
+const char* DEVICE_TOKEN = ECODROP_DEVICE_TOKEN;
 const char* FIRMWARE_VERSION = "0.1.0";
 
 const int SERVO_PIN = 18;
