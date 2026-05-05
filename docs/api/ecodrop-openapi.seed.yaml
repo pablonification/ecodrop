@@ -34,6 +34,14 @@ paths:
           description: Deposit session created
         "409":
           description: SmartBin is offline or user already has an active session
+  /api/withdrawals:
+    post:
+      summary: Create a user withdrawal request
+      responses:
+        "200":
+          description: Pending withdrawal created
+        "409":
+          description: User has insufficient points
   /api/deposit-sessions/{session_id}/validate:
     post:
       summary: Validate bottle image and queue SmartBin open command if valid
@@ -149,3 +157,21 @@ paths:
       responses:
         "200":
           description: Recent IoT logs
+  /api/admin/withdrawals/{withdrawal_id}:
+    patch:
+      summary: Update withdrawal status
+      responses:
+        "200":
+          description: Updated withdrawal request
+  /api/admin/education:
+    post:
+      summary: Create education article
+      responses:
+        "200":
+          description: Created education article
+  /api/admin/education/{article_id}:
+    patch:
+      summary: Update education article
+      responses:
+        "200":
+          description: Updated education article

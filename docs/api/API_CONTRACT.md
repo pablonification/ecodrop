@@ -15,6 +15,16 @@ Image validation alone must never create a successful transaction or increment u
 
 ## Mobile REST
 
+### `POST /api/auth/dev-login`
+
+Development auth endpoint. Returns a bearer token in the form
+`dev-token-{user_id}`. Admin endpoints require an admin dev token.
+
+### `GET /api/users/me`
+
+Returns the current user. During development the endpoint accepts either a
+`Bearer dev-token-{user_id}` header or defaults to `user-demo-001`.
+
 ### `POST /api/deposit-sessions`
 
 Request:
@@ -161,5 +171,35 @@ Supported service modes:
 - `GET /api/admin/users`
 - `GET /api/admin/withdrawals`
 - `GET /api/admin/iot-logs`
+- `PATCH /api/admin/withdrawals/{withdrawal_id}`
+- `POST /api/admin/education`
+- `PATCH /api/admin/education/{article_id}`
 
-These are initially read-only scaffold endpoints. Admin mutation endpoints should be added by the web/backend agents after the core dashboard is stable.
+Admin endpoints require `Authorization: Bearer dev-token-admin-demo-001` in the
+current development auth mode.
+
+## Education And Withdrawals
+
+### `GET /api/education`
+
+Returns published education articles.
+
+### `GET /api/education/{article_id}`
+
+Returns one education article.
+
+### `POST /api/withdrawals`
+
+Request:
+
+```json
+{
+  "user_id": "user-demo-001",
+  "points": 1000,
+  "method": "ewallet",
+  "account_target": "081234567890"
+}
+```
+
+Response: pending `WithdrawalRequest`. The backend rejects requests when the
+user does not have enough points.

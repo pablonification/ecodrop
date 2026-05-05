@@ -108,6 +108,33 @@ export interface WithdrawalRequest {
   requestedAt: string;
 }
 
+export interface CreateWithdrawalRequest {
+  userId: string;
+  points: number;
+  method: "bank_transfer" | "ewallet";
+  accountTarget: string;
+}
+
+export interface UpdateWithdrawalStatusRequest {
+  status: WithdrawalStatus;
+}
+
+export interface CreateEducationArticleRequest {
+  title: string;
+  excerpt: string;
+  content: string;
+  category: "recycling" | "lifestyle" | "plastic" | "campaign";
+  imageUrl?: string;
+}
+
+export interface UpdateEducationArticleRequest {
+  title?: string;
+  excerpt?: string;
+  content?: string;
+  category?: "recycling" | "lifestyle" | "plastic" | "campaign";
+  imageUrl?: string;
+}
+
 export interface AdminOverview {
   totalUsers: number;
   totalTransactions: number;

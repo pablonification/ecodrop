@@ -21,6 +21,15 @@ Reward integrity is enforced in the backend:
 - duplicate sensor events return the existing transaction and do not double-award;
 - expired insert windows create failed zero-point transactions.
 
+Persistence boundaries are present:
+
+- repository interfaces and in-memory repositories for demo runtime;
+- MongoDB collection/index initializer for `USE_MOCK_DB=false`;
+- Redis command queue adapter for the SmartBin command queue transition.
+
+Development auth is centralized in `app/core/auth.py`. Admin endpoints accept
+`Authorization: Bearer dev-token-admin-demo-001`.
+
 ## Run
 
 ```bash
