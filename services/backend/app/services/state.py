@@ -15,6 +15,7 @@ from app.models.schemas import (
     SmartBinCommand,
     WithdrawalRequest,
 )
+from app.repositories.memory import InMemoryRepositories
 from app.services.rewards import compute_tier
 
 
@@ -64,6 +65,7 @@ class InMemoryState:
         self.transactions_by_session: Dict[str, str] = {}
         self.commands: Dict[str, List[SmartBinCommand]] = {}
         self.iot_logs: List[IoTLog] = []
+        self.repositories = InMemoryRepositories(self.users, self.devices)
         self.articles: List[EducationArticle] = [
             EducationArticle(
                 id="edu-001",

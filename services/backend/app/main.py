@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -9,13 +11,22 @@ from app.models.schemas import (
     SensorEventRequest,
 )
 from app.services.ai_client import validate_bottle_image
+from app.services.persistence import close_persistence, connect_persistence
 from app.services.state import now_utc, state
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await connect_persistence()
+    yield
+    await close_persistence()
 
 
 app = FastAPI(
     title="EcoDrop Backend API",
     description="FastAPI scaffold for EcoDrop mobile, admin dashboard, AI/CV, and SmartBin integration.",
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
