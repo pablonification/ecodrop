@@ -1,7 +1,15 @@
+#include <Arduino.h>
 #include <ArduinoJson.h>
 #include <ESP32Servo.h>
 #include <HTTPClient.h>
 #include <WiFi.h>
+
+/*
+ * HARDWARE WIRING RULES:
+ * - Servo MG996R MUST use external 5V power, not ESP32 3.3V.
+ * - ESP32 and servo power supply MUST share ground.
+ * - Keep fail-safe default: lid closed.
+ */
 
 // Update these values before flashing.
 const char* WIFI_SSID = "YOUR_WIFI_SSID";
@@ -27,6 +35,8 @@ Servo lidServo;
 unsigned long lastHeartbeatAt = 0;
 unsigned long lastCommandPollAt = 0;
 unsigned long lastReconnectAttemptAt = 0;
+unsigned long lidOpenedAt = 0;
+unsigned long lidOpenDurationMs = 10000;
 
 bool lidOpen = false;
 bool sessionActive = false;
@@ -50,11 +60,24 @@ void setup() {
 void loop() {
   ensureWiFi();
   if (WiFi.status() != WL_CONNECTED) {
+    if (lidOpen) {
+      Serial.println("Fail-safe: Wi-Fi lost, closing lid.");
+      closeLid();
+      sessionActive = false;
+      activeSessionId = "";
+    }
     delay(100);
     return;
   }
 
   unsigned long now = millis();
+
+  if (lidOpen && (now - lidOpenedAt >= lidOpenDurationMs)) {
+    Serial.println("Fail-safe: Insert window expired, closing lid.");
+    closeLid();
+    sessionActive = false;
+    activeSessionId = "";
+  }
 
   if (now - lastHeartbeatAt >= HEARTBEAT_INTERVAL_MS) {
     sendHeartbeat();
@@ -105,7 +128,7 @@ void ensureWiFi() {
 }
 
 void registerDevice() {
-  StaticJsonDocument<256> doc;
+  JsonDocument doc;
   doc["device_id"] = DEVICE_ID;
   doc["firmware_version"] = FIRMWARE_VERSION;
   doc["location_name"] = "Prototype Location";
@@ -117,7 +140,7 @@ void registerDevice() {
 }
 
 void sendHeartbeat() {
-  StaticJsonDocument<256> doc;
+  JsonDocument doc;
   doc["status"] = "online";
   doc["capacity_percent"] = 42;
   doc["firmware_version"] = FIRMWARE_VERSION;
@@ -133,7 +156,7 @@ void pollNextCommand() {
   String response = getJson(path);
   if (response.length() == 0) return;
 
-  StaticJsonDocument<512> doc;
+  JsonDocument doc;
   DeserializationError error = deserializeJson(doc, response);
   if (error) {
     Serial.println("Failed to parse command JSON.");
@@ -149,6 +172,8 @@ void pollNextCommand() {
     activeSessionId = String(sessionId);
     sessionActive = activeSessionId.length() > 0;
     sensorAlreadyReported = false;
+    lidOpenDurationMs = (unsigned long)durationSeconds * 1000;
+    lidOpenedAt = millis();
     openLid();
     acknowledgeCommand(commandId, "acknowledged", "Lid opened.");
     Serial.printf("Lid opened for session %s, window %d seconds.\n", activeSessionId.c_str(), durationSeconds);
@@ -158,6 +183,10 @@ void pollNextCommand() {
     activeSessionId = "";
     acknowledgeCommand(commandId, "acknowledged", "Lid closed.");
   } else if (String(action) != "noop") {
+    Serial.println("Fail-safe: Unknown command received, closing lid.");
+    closeLid();
+    sessionActive = false;
+    activeSessionId = "";
     acknowledgeCommand(commandId, "failed", "Unknown action.");
   }
 }
@@ -170,7 +199,7 @@ void readIrSensor() {
   if (!objectDetected) return;
 
   sensorAlreadyReported = true;
-  StaticJsonDocument<256> doc;
+  JsonDocument doc;
   doc["session_id"] = activeSessionId;
   doc["sensor_state"] = "object_detected";
   doc["raw_value"] = raw;
@@ -185,7 +214,7 @@ void readIrSensor() {
 void acknowledgeCommand(const char* commandId, const char* status, const char* message) {
   if (String(commandId).length() == 0 || String(commandId).startsWith("noop")) return;
 
-  StaticJsonDocument<256> doc;
+  JsonDocument doc;
   doc["status"] = status;
   doc["message"] = message;
 
