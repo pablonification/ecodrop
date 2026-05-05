@@ -15,8 +15,8 @@ import {
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
-export const ENABLE_DEMO_SENSOR_CONFIRM = import.meta.env.VITE_ENABLE_DEMO_SENSOR_CONFIRM !== "false";
-export const AUTO_DEMO_SENSOR_CONFIRM = import.meta.env.VITE_AUTO_DEMO_SENSOR_CONFIRM !== "false";
+export const ENABLE_DEMO_SENSOR_CONFIRM = import.meta.env.VITE_ENABLE_DEMO_SENSOR_CONFIRM === "true";
+export const AUTO_DEMO_SENSOR_CONFIRM = import.meta.env.VITE_AUTO_DEMO_SENSOR_CONFIRM === "true";
 export const DEMO_SENSOR_CONFIRM_DELAY_MS = Number(import.meta.env.VITE_DEMO_SENSOR_CONFIRM_DELAY_MS ?? 4000);
 
 export async function getCurrentUser(): Promise<EcoUser> {
