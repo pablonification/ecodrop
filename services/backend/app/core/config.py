@@ -13,6 +13,11 @@ class Settings(BaseSettings):
     use_mock_db: bool = True
     command_mode: str = "hybrid"
     deposit_insert_window_seconds: int = 10
+    deposit_session_ttl_minutes: int = 5
+    device_heartbeat_stale_seconds: int = 120
+    bottle_confidence_threshold: float = 0.65
+    bottle_min_volume_ml: int = 250
+    bottle_max_volume_ml: int = 2000
     points_per_100ml: int = 10
 
     class Config:

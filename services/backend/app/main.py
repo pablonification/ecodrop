@@ -42,6 +42,7 @@ async def dev_login(email: str = "arqila@example.com"):
 
 @app.get("/api/users/me")
 async def get_me(user_id: str = "user-demo-001"):
+    state.expire_stale_sessions()
     user = state.users.get(user_id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
@@ -50,6 +51,8 @@ async def get_me(user_id: str = "user-demo-001"):
 
 @app.get("/api/devices")
 async def list_devices():
+    for device_id in list(state.devices.keys()):
+        state.refresh_device_availability(device_id)
     return list(state.devices.values())
 
 
@@ -65,6 +68,7 @@ async def create_deposit_session(payload: CreateSessionRequest):
 
 @app.get("/api/deposit-sessions/{session_id}")
 async def get_deposit_session(session_id: str):
+    state.expire_stale_sessions()
     session = state.sessions.get(session_id)
     if session is None:
         raise HTTPException(status_code=404, detail="Deposit session not found")
@@ -76,7 +80,10 @@ async def validate_deposit_image(session_id: str, image: UploadFile = File(...))
     if session_id not in state.sessions:
         raise HTTPException(status_code=404, detail="Deposit session not found")
     validation = await validate_bottle_image(image)
-    return state.set_validation(session_id, validation)
+    try:
+        return state.set_validation(session_id, validation)
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
 
 
 @app.post("/api/deposit-sessions/{session_id}/confirm")
@@ -91,7 +98,7 @@ async def confirm_deposit_manually(session_id: str):
 
 @app.get("/api/transactions")
 async def list_user_transactions(user_id: str = "user-demo-001"):
-    return [t for t in state.transactions.values() if t.user_id == user_id]
+    return state.list_transactions(user_id=user_id)
 
 
 @app.get("/api/education")
@@ -106,7 +113,7 @@ async def admin_dashboard():
 
 @app.get("/api/admin/transactions")
 async def admin_transactions():
-    return list(state.transactions.values())
+    return state.list_transactions()
 
 
 @app.get("/api/admin/users")
@@ -119,6 +126,11 @@ async def admin_withdrawals():
     return state.withdrawals
 
 
+@app.get("/api/admin/iot-logs")
+async def admin_iot_logs():
+    return state.iot_logs[-100:]
+
+
 @app.post("/api/iot/devices/register")
 async def register_device(payload: DeviceRegistrationRequest):
     existing = state.devices.get(payload.device_id)
@@ -126,6 +138,13 @@ async def register_device(payload: DeviceRegistrationRequest):
         existing.status = "online"
         existing.last_heartbeat_at = now_utc()
         existing.firmware_version = payload.firmware_version
+        if payload.location_name:
+            existing.location_name = payload.location_name
+        state.log_iot(
+            device_id=payload.device_id,
+            event_type="device_registered",
+            message="SmartBin registration refreshed.",
+        )
         return existing
     device = {
         "id": payload.device_id,
@@ -142,6 +161,11 @@ async def register_device(payload: DeviceRegistrationRequest):
 
     smart_bin = SmartBin(**device)
     state.devices[payload.device_id] = smart_bin
+    state.log_iot(
+        device_id=payload.device_id,
+        event_type="device_registered",
+        message="SmartBin registered.",
+    )
     return smart_bin
 
 
@@ -154,11 +178,18 @@ async def device_heartbeat(device_id: str, payload: HeartbeatRequest):
     device.capacity_percent = payload.capacity_percent
     device.firmware_version = payload.firmware_version or device.firmware_version
     device.last_heartbeat_at = now_utc()
+    state.log_iot(
+        device_id=device_id,
+        event_type="heartbeat",
+        message=f"Heartbeat received with status {payload.status}.",
+    )
     return device
 
 
 @app.get("/api/iot/devices/{device_id}/commands/next")
 async def get_next_device_command(device_id: str):
+    if device_id not in state.devices:
+        raise HTTPException(status_code=404, detail="SmartBin device not found")
     command = state.next_command(device_id)
     if command is None:
         return {
@@ -176,17 +207,25 @@ async def get_next_device_command(device_id: str):
 @app.post("/api/iot/devices/{device_id}/commands/{command_id}/ack")
 async def acknowledge_device_command(device_id: str, command_id: str, payload: CommandAckRequest):
     try:
-        return state.acknowledge_command(device_id, command_id, payload.status)
+        return state.acknowledge_command(device_id, command_id, payload.status, payload.message)
     except KeyError:
         raise HTTPException(status_code=404, detail="Command not found")
 
 
 @app.post("/api/iot/devices/{device_id}/sensor-events")
 async def receive_sensor_event(device_id: str, payload: SensorEventRequest):
+    if device_id not in state.devices:
+        raise HTTPException(status_code=404, detail="SmartBin device not found")
     if payload.sensor_state != "object_detected":
+        state.log_iot(
+            device_id=device_id,
+            event_type="sensor_ignored",
+            message="Sensor event ignored because beam is clear.",
+            session_id=payload.session_id,
+        )
         return {"status": "ignored", "reason": "Sensor is clear"}
     try:
-        transaction = state.confirm_sensor(payload.session_id)
+        transaction = state.confirm_sensor(payload.session_id, device_id=device_id)
     except KeyError:
         raise HTTPException(status_code=404, detail="Deposit session not found")
     except ValueError as exc:

@@ -61,7 +61,9 @@ class DepositSession(BaseModel):
     device_id: str
     status: DepositSessionStatus = "created"
     validation: Optional[BottleValidation] = None
+    failure_reason: Optional[str] = None
     created_at: datetime
+    updated_at: datetime
     expires_at: Optional[datetime] = None
     insert_deadline_at: Optional[datetime] = None
 
@@ -119,6 +121,7 @@ class SensorEventRequest(BaseModel):
     session_id: str
     sensor_state: Literal["object_detected", "clear"]
     raw_value: Optional[int] = None
+    event_id: Optional[str] = None
 
 
 class DeviceRegistrationRequest(BaseModel):
@@ -130,7 +133,7 @@ class DeviceRegistrationRequest(BaseModel):
 
 class HeartbeatRequest(BaseModel):
     status: SmartBinStatus = "online"
-    capacity_percent: int = 0
+    capacity_percent: int = Field(default=0, ge=0, le=100)
     firmware_version: Optional[str] = None
 
 
@@ -142,7 +145,9 @@ class SmartBinCommand(BaseModel):
     duration_seconds: int = 10
     status: Literal["queued", "sent", "acknowledged", "failed"] = "queued"
     created_at: datetime
-    metadata: Dict[str, str] = {}
+    acknowledged_at: Optional[datetime] = None
+    message: Optional[str] = None
+    metadata: Dict[str, str] = Field(default_factory=dict)
 
 
 class CommandAckRequest(BaseModel):
@@ -162,8 +167,29 @@ class DashboardSeriesPoint(BaseModel):
     points: int
 
 
+class IoTLog(BaseModel):
+    id: str
+    device_id: str
+    event_type: Literal[
+        "device_registered",
+        "heartbeat",
+        "command_queued",
+        "command_sent",
+        "command_acknowledged",
+        "command_failed",
+        "sensor_detected",
+        "sensor_ignored",
+        "session_failed",
+    ]
+    message: str
+    session_id: Optional[str] = None
+    command_id: Optional[str] = None
+    created_at: datetime
+
+
 class AdminDashboardResponse(BaseModel):
     overview: AdminOverview
     devices: List[SmartBin]
     transactions: List[DepositTransaction]
     series: List[DashboardSeriesPoint]
+    iot_logs: List[IoTLog] = Field(default_factory=list)
