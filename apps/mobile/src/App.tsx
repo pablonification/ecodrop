@@ -20,13 +20,14 @@ import {
   getTransactions
 } from "./api";
 import { ActivityScreen } from "./screens/ActivityScreen";
+import { AppOverlayScreens } from "./screens/AppOverlayScreens";
 import { DepositFlow } from "./screens/DepositFlow";
 import { EducationScreen } from "./screens/EducationScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { LoginScreen } from "./screens/LoginScreen";
 import { ProfileScreen } from "./screens/ProfileScreen";
 import { WithdrawFlow } from "./screens/WithdrawFlow";
-import type { FlowStep, ProfileView, Tab, WithdrawStep } from "./types";
+import type { FlowStep, ProfileView, OverlayView, WithdrawStep, Tab } from "./types";
 
 const ACTIVE_DEPOSIT_STORAGE_KEY = "ecodrop.activeDeposit";
 const DEV_SESSION_STORAGE_KEY = "ecodrop.devSession";
@@ -44,6 +45,7 @@ export default function App() {
   const [selectedArticle, setSelectedArticle] = useState<EducationArticle | null>(null);
   const [selectedSmartBin, setSelectedSmartBin] = useState<SmartBin | null>(null);
   const [profileView, setProfileView] = useState<ProfileView>("main");
+  const [overlayView, setOverlayView] = useState<OverlayView | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem(DEV_SESSION_STORAGE_KEY) === "active");
   const [withdrawStep, setWithdrawStep] = useState<WithdrawStep>("idle");
 
@@ -54,6 +56,7 @@ export default function App() {
   const isEducationDetail = isEducationTab && selectedArticle !== null;
   const isActivityTab = tab === "activity";
   const isActivityDetail = isActivityTab && selectedTransaction !== null;
+  const isOverlayView = overlayView !== null;
 
   useEffect(() => {
     void loadAppData();
@@ -106,7 +109,6 @@ export default function App() {
     setProfileView("main");
     setFinalTransaction(null);
     setSession(null);
-    setWithdrawStep("idle");
     setFlow("qr");
   }
 
@@ -123,6 +125,7 @@ export default function App() {
     setFinalTransaction(null);
     setTab(nextTab);
     setSelectedSmartBin(null);
+    setOverlayView(null);
     await loadAppData();
   }
 
@@ -132,6 +135,21 @@ export default function App() {
     setSelectedTransaction(null);
     setSelectedSmartBin(null);
     setProfileView("main");
+    setOverlayView(null);
+  }
+
+  function openOverlay(view: OverlayView) {
+    setOverlayView(view);
+    setSelectedArticle(null);
+    setSelectedTransaction(null);
+    setSelectedSmartBin(null);
+    setProfileView("main");
+  }
+
+  function openSmartBinFromOverlay(device: SmartBin) {
+    setOverlayView(null);
+    setTab("home");
+    setSelectedSmartBin(device);
   }
 
   function startDemoSession() {
@@ -156,6 +174,7 @@ export default function App() {
     setSelectedSmartBin(null);
     setSession(null);
     setFinalTransaction(null);
+    setOverlayView(null);
   }
 
   return (
@@ -186,10 +205,12 @@ export default function App() {
           />
         ) : (
           <>
-            {!isProfileSubView && !isHomeBinDetail && !isEducationTab && !isActivityTab && <AppHeader />}
+            {!isOverlayView && !isProfileSubView && !isHomeBinDetail && !isEducationTab && !isActivityTab && <AppHeader />}
             <div
               className={
-                isProfileSubView
+                isOverlayView
+                  ? "screen-content overlay-content"
+                  : isProfileSubView
                   ? "screen-content profile-subview-content"
                   : isHomeBinDetail
                     ? "screen-content home-bin-detail-content"
@@ -200,7 +221,18 @@ export default function App() {
                     : "screen-content"
               }
             >
-              {tab === "home" && (
+              {overlayView && (
+                <AppOverlayScreens
+                  view={overlayView}
+                  user={user}
+                  devices={devices}
+                  onBack={() => setOverlayView(null)}
+                  onOpenView={setOverlayView}
+                  onOpenSmartBin={openSmartBinFromOverlay}
+                  onStartDeposit={startDeposit}
+                />
+              )}
+              {!overlayView && tab === "home" && (
                 <HomeScreen
                   user={user}
                   devices={devices}
@@ -209,20 +241,23 @@ export default function App() {
                   onWithdraw={startWithdraw}
                   onOpenActivity={() => changeTab("activity")}
                   onOpenEducation={() => changeTab("education")}
+                  onOpenWithdraw={() => openOverlay("withdraw")}
+                  onOpenSmartBins={() => openOverlay("smartbins")}
                   selectedSmartBin={selectedSmartBin}
                   onOpenSmartBin={setSelectedSmartBin}
                   onCloseSmartBin={() => setSelectedSmartBin(null)}
                 />
               )}
-              {tab === "activity" && (
+              {!overlayView && tab === "activity" && (
                 <ActivityScreen
                   transactions={transactions}
                   selected={selectedTransaction}
                   onSelect={setSelectedTransaction}
                   onBack={() => setSelectedTransaction(null)}
+                  onOpenReward={() => openOverlay("reward")}
                 />
               )}
-              {tab === "education" && (
+              {!overlayView && tab === "education" && (
                 <EducationScreen
                   articles={articles}
                   selected={selectedArticle}
@@ -231,16 +266,20 @@ export default function App() {
                 />
               )}
               {tab === "profile" && (
-                <ProfileScreen
-                  user={user}
-                  view={profileView}
-                  setView={setProfileView}
+                <ProfileScreen 
+                  user={user} 
+                  view={profileView} 
+                  setView={setProfileView} 
                   onLogout={logout}
+                  onOpenWithdraw={() => openOverlay("withdraw")}
+                  onOpenWithdrawalHistory={() => openOverlay("withdrawal-history")}
+                  onOpenNotifications={() => openOverlay("notifications")}
+                  onOpenSupport={() => openOverlay("support")}
                   onWithdraw={startWithdraw}
                 />
               )}
             </div>
-            {!isProfileSubView && !isHomeBinDetail && !isEducationDetail && !isActivityDetail && <BottomNav tab={tab} setTab={changeTab} onStart={startDeposit} />}
+            {!isOverlayView && !isProfileSubView && !isHomeBinDetail && !isEducationDetail && !isActivityDetail && <BottomNav tab={tab} setTab={changeTab} onStart={startDeposit} />}
           </>
         )}
       </section>
