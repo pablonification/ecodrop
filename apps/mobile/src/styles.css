@@ -129,7 +129,7 @@ button:disabled {
   position: absolute;
   width: 128px;
   height: 128px;
-  right: -64px;
+  right: 0;
   top: -64px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.12);
@@ -153,21 +153,23 @@ button:disabled {
 
 .balance-hero div {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 2px 16px;
+  gap: 2px 12px;
 }
 
 .balance-hero b {
-  font-size: 19px;
+  font-size: 18px;
   line-height: 28px;
+  min-width: 0;
 }
 
 .balance-hero button {
   grid-row: 1 / span 2;
   grid-column: 2;
   min-height: 40px;
-  padding: 0 24px;
+  padding: 0 18px;
+  max-width: 118px;
   border: 0;
   border-radius: 999px;
   background: #ffffff;

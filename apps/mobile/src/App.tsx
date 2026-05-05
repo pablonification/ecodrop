@@ -166,7 +166,7 @@ export default function App() {
             setFinalTransaction={setFinalTransaction}
             onCreateSession={createSessionFromQr}
             onClose={() => closeDeposit("home")}
-            onDone={() => closeDeposit("activity")}
+            onDone={() => closeDeposit("home")}
           />
         )}
       </section>
