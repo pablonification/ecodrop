@@ -2254,13 +2254,23 @@ button:disabled {
 .privacy-card header {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   margin-bottom: 20px;
 }
 
 .privacy-card header span {
   color: #006d38;
   flex: none;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+}
+
+.privacy-card header span svg {
+  width: 28px;
+  height: 28px;
+  stroke-width: 2.4;
 }
 
 .privacy-card h3 {
@@ -2328,6 +2338,13 @@ button:disabled {
   background: #006d38;
   font-weight: 900;
   box-shadow: 0 12px 24px rgba(0, 109, 56, 0.18);
+}
+
+.privacy-footer button img {
+  width: 20px;
+  height: 18px;
+  display: block;
+  object-fit: contain;
 }
 
 .camera-view {

@@ -214,7 +214,7 @@ function HelpView() {
 function PrivacyView() {
   const sections = [
     {
-      icon: <CircleHelp size={18} />,
+      icon: <CircleHelp size={28} />,
       title: "Informasi yang Kami Kumpulkan",
       body: "Kami mengumpulkan informasi yang Anda berikan secara langsung saat pendaftaran:",
       items: [
@@ -224,7 +224,7 @@ function PrivacyView() {
       ]
     },
     {
-      icon: <Leaf size={18} />,
+      icon: <Leaf size={28} />,
       title: "Cara Kami Menggunakan Data",
       body: "Informasi yang terkumpul digunakan semata-mata untuk meningkatkan pengalaman Anda:",
       items: [
@@ -234,14 +234,14 @@ function PrivacyView() {
       ]
     },
     {
-      icon: <ShieldCheck size={18} />,
+      icon: <ShieldCheck size={28} />,
       title: "Penyimpanan dan Keamanan Data",
       body:
         "Semua data disimpan di server terenkripsi dengan standar keamanan industri perbankan. Kami menggunakan protokol SSL/TLS untuk transmisi data dan melakukan audit keamanan berkala.",
       items: ["Kami tidak akan menjual atau menyewakan data pribadi Anda kepada pihak ketiga."]
     },
     {
-      icon: <FileCheck2 size={18} />,
+      icon: <FileCheck2 size={28} />,
       title: "Hak Pengguna",
       body: "Sesuai dengan regulasi perlindungan data, Anda memiliki hak penuh untuk:",
       items: [
@@ -251,7 +251,7 @@ function PrivacyView() {
       ]
     },
     {
-      icon: <Mail size={18} />,
+      icon: <Mail size={28} />,
       title: "Kontak",
       body: "Tim Perlindungan Data kami siap membantu Anda dengan pertanyaan apapun:",
       items: ["EcoDrop Indonesia", "Email: privacy@ecodrop.com", "Jakarta Selatan"]
@@ -293,7 +293,7 @@ function PrivacyView() {
       <footer className="privacy-footer">
         <p>Jika Anda memiliki pertanyaan terkait privasi, hubungi kami.</p>
         <button>
-          <Headphones size={16} />
+          <img src={figmaAssets.privacyContactIcon} alt="" />
           Hubungi Kami
         </button>
       </footer>
