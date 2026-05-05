@@ -55,6 +55,23 @@ def test_validation_queues_lid_but_does_not_award_points(client: TestClient):
     assert command["session_id"] == session["id"]
 
 
+def test_active_session_can_be_recovered_after_duplicate_start(client: TestClient):
+    session = create_session(client)
+    duplicate_response = client.post(
+        "/api/deposit-sessions",
+        json={"qr_token": "ECO-SMARTBIN-001", "user_id": "user-demo-001"},
+    )
+
+    active_response = client.get(
+        "/api/deposit-sessions/active",
+        params={"user_id": "user-demo-001", "device_id": "ECO-SMARTBIN-001"},
+    )
+
+    assert duplicate_response.status_code == 409
+    assert active_response.status_code == 200
+    assert active_response.json()["id"] == session["id"]
+
+
 def test_sensor_confirmation_awards_points_once(client: TestClient):
     start_points = get_user_points(client)
     session = create_session(client)

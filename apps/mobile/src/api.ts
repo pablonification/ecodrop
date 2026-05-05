@@ -64,6 +64,10 @@ export async function createDepositSession(qrToken: string): Promise<DepositSess
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ qr_token: qrToken, user_id: "user-demo-001" })
     });
+    if (response.status === 409) {
+      const activeSession = await getActiveDepositSession(qrToken);
+      if (activeSession) return activeSession;
+    }
     if (!response.ok) throw new Error("Failed to create session");
     return normalizeSession(await response.json());
   } catch {
@@ -77,6 +81,16 @@ export async function createDepositSession(qrToken: string): Promise<DepositSess
       expiresAt: new Date(Date.now() + 5 * 60 * 1000).toISOString()
     };
   }
+}
+
+async function getActiveDepositSession(deviceId: string): Promise<DepositSession | null> {
+  const params = new URLSearchParams({
+    user_id: "user-demo-001",
+    device_id: deviceId
+  });
+  const response = await fetch(`${API_BASE_URL}/api/deposit-sessions/active?${params.toString()}`);
+  if (!response.ok) return null;
+  return normalizeSession(await response.json());
 }
 
 export async function getDepositSession(sessionId: string): Promise<DepositSession | null> {

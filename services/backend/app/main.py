@@ -79,6 +79,14 @@ async def create_deposit_session(payload: CreateSessionRequest):
         raise HTTPException(status_code=409, detail=str(exc))
 
 
+@app.get("/api/deposit-sessions/active")
+async def get_active_deposit_session(user_id: str = "user-demo-001", device_id: str = "ECO-SMARTBIN-001"):
+    session = state.get_active_session(user_id=user_id, device_id=device_id)
+    if session is None:
+        raise HTTPException(status_code=404, detail="Active deposit session not found")
+    return session
+
+
 @app.get("/api/deposit-sessions/{session_id}")
 async def get_deposit_session(session_id: str):
     state.expire_stale_sessions()

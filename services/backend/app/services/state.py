@@ -129,6 +129,27 @@ class InMemoryState:
         self.sessions[session.id] = session
         return session
 
+    def get_active_session(self, user_id: str, device_id: str) -> Optional[DepositSession]:
+        self.expire_stale_sessions()
+        active_statuses = {
+            "created",
+            "qr_validated",
+            "image_uploaded",
+            "validating",
+            "validated",
+            "awaiting_insert",
+        }
+        return next(
+            (
+                session
+                for session in self.sessions.values()
+                if session.user_id == user_id
+                and session.device_id == device_id
+                and session.status in active_statuses
+            ),
+            None,
+        )
+
     def create_withdrawal(self, payload: CreateWithdrawalRequest) -> WithdrawalRequest:
         user = self.users.get(payload.user_id)
         if user is None:
@@ -492,20 +513,7 @@ class InMemoryState:
         return points
 
     def _has_active_session(self, user_id: str, device_id: str) -> bool:
-        active_statuses = {
-            "created",
-            "qr_validated",
-            "image_uploaded",
-            "validating",
-            "validated",
-            "awaiting_insert",
-        }
-        return any(
-            session.user_id == user_id
-            and session.device_id == device_id
-            and session.status in active_statuses
-            for session in self.sessions.values()
-        )
+        return self.get_active_session(user_id=user_id, device_id=device_id) is not None
 
 
 state = InMemoryState()
