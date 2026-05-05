@@ -121,9 +121,11 @@ button:disabled {
 }
 
 .login-logo-mark {
-  width: 202px;
+  width: 196px;
+  max-width: min(196px, 70vw);
   height: auto;
   display: block;
+  object-fit: contain;
 }
 
 .login-brand p,
@@ -147,6 +149,7 @@ button:disabled {
   min-height: 54px;
   border: 1px solid #d9e2dd;
   border-radius: 999px;
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -157,9 +160,11 @@ button:disabled {
   font-weight: 800;
 }
 
-.google-login-button img {
+.google-mark {
   width: 20px;
   height: 20px;
+  display: block;
+  flex: none;
 }
 
 .screen-stack {
