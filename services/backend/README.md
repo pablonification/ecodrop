@@ -14,6 +14,13 @@ The backend is the source of truth for:
 
 By default this scaffold uses an in-memory store so frontend and IoT teams can integrate immediately. MongoDB and Redis fields are present in configuration and Docker Compose for the next implementation step.
 
+Reward integrity is enforced in the backend:
+
+- image validation only estimates points and queues `open_lid`;
+- points are awarded only after a matching SmartBin `object_detected` sensor event;
+- duplicate sensor events return the existing transaction and do not double-award;
+- expired insert windows create failed zero-point transactions.
+
 ## Run
 
 ```bash
@@ -24,3 +31,15 @@ uvicorn app.main:app --reload --port 8000
 ```
 
 Open `http://localhost:8000/docs`.
+
+## Test
+
+```bash
+PYTHONPATH=app python -m pytest tests
+```
+
+From the monorepo root:
+
+```bash
+PYTHONPATH=services/backend services/backend/.venv/bin/python -m pytest services/backend/tests
+```

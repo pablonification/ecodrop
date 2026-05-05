@@ -45,6 +45,7 @@ export interface SmartBin {
   status: SmartBinStatus;
   capacityPercent: number;
   lastHeartbeatAt?: string;
+  firmwareVersion?: string;
 }
 
 export interface BottleValidation {
@@ -65,8 +66,11 @@ export interface DepositSession {
   deviceId: string;
   status: DepositSessionStatus;
   validation?: BottleValidation;
+  failureReason?: string;
   createdAt: string;
+  updatedAt?: string;
   expiresAt?: string;
+  insertDeadlineAt?: string;
 }
 
 export interface DepositTransaction {
@@ -113,6 +117,53 @@ export interface AdminOverview {
   pendingWithdrawals: number;
 }
 
+export interface DashboardSeriesPoint {
+  label: string;
+  transactions: number;
+  volumeMl: number;
+  points: number;
+}
+
+export interface SmartBinCommand {
+  id: string;
+  deviceId: string;
+  action: "open_lid" | "close_lid" | "noop";
+  sessionId?: string;
+  durationSeconds: number;
+  status: "queued" | "sent" | "acknowledged" | "failed";
+  createdAt: string;
+  acknowledgedAt?: string;
+  message?: string;
+  metadata: Record<string, string>;
+}
+
+export interface IoTLog {
+  id: string;
+  deviceId: string;
+  eventType:
+    | "device_registered"
+    | "heartbeat"
+    | "command_queued"
+    | "command_sent"
+    | "command_acknowledged"
+    | "command_failed"
+    | "sensor_detected"
+    | "sensor_ignored"
+    | "session_failed";
+  message: string;
+  sessionId?: string;
+  commandId?: string;
+  createdAt: string;
+}
+
+export interface AdminDashboardResponse {
+  overview: AdminOverview;
+  devices: SmartBin[];
+  transactions: DepositTransaction[];
+  series: DashboardSeriesPoint[];
+  iotLogs: IoTLog[];
+}
+
 export interface ApiEnvelope<T> {
   data: T;
   message?: string;
@@ -144,7 +195,8 @@ export const demoSmartBins: SmartBin[] = [
     longitude: 107.6107,
     status: "online",
     capacityPercent: 42,
-    lastHeartbeatAt: new Date().toISOString()
+    lastHeartbeatAt: new Date().toISOString(),
+    firmwareVersion: "0.1.0"
   },
   {
     id: "ECO-SMARTBIN-002",
