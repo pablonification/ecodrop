@@ -13,6 +13,9 @@ from app.models.schemas import (
     IoTLog,
     SmartBin,
     SmartBinCommand,
+    CreateEducationArticleRequest,
+    CreateWithdrawalRequest,
+    UpdateEducationArticleRequest,
     WithdrawalRequest,
 )
 from app.repositories.memory import InMemoryRepositories
@@ -125,6 +128,61 @@ class InMemoryState:
         )
         self.sessions[session.id] = session
         return session
+
+    def create_withdrawal(self, payload: CreateWithdrawalRequest) -> WithdrawalRequest:
+        user = self.users.get(payload.user_id)
+        if user is None:
+            raise KeyError("User not found.")
+        if int(user.get("points", 0)) < payload.points:
+            raise ValueError("User does not have enough points for withdrawal.")
+        withdrawal = WithdrawalRequest(
+            id=f"wd-{uuid4().hex[:10]}",
+            user_id=payload.user_id,
+            user_name=str(user.get("name", "EcoDrop User")),
+            points=payload.points,
+            method=payload.method,
+            account_target=payload.account_target,
+            status="pending",
+            requested_at=now_utc(),
+        )
+        self.withdrawals.append(withdrawal)
+        return withdrawal
+
+    def update_withdrawal_status(self, withdrawal_id: str, status: str) -> WithdrawalRequest:
+        for withdrawal in self.withdrawals:
+            if withdrawal.id == withdrawal_id:
+                withdrawal.status = status
+                return withdrawal
+        raise KeyError("Withdrawal not found.")
+
+    def create_education_article(
+        self,
+        payload: CreateEducationArticleRequest,
+    ) -> EducationArticle:
+        article = EducationArticle(
+            id=f"edu-{uuid4().hex[:10]}",
+            title=payload.title,
+            excerpt=payload.excerpt,
+            content=payload.content,
+            category=payload.category,
+            image_url=payload.image_url,
+            published_at=now_utc(),
+        )
+        self.articles.insert(0, article)
+        return article
+
+    def update_education_article(
+        self,
+        article_id: str,
+        payload: UpdateEducationArticleRequest,
+    ) -> EducationArticle:
+        for article in self.articles:
+            if article.id == article_id:
+                update = payload.model_dump(exclude_unset=True)
+                for key, value in update.items():
+                    setattr(article, key, value)
+                return article
+        raise KeyError("Education article not found.")
 
     def set_validation(self, session_id: str, validation: BottleValidation) -> DepositSession:
         self.expire_stale_sessions()

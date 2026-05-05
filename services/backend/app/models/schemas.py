@@ -103,6 +103,33 @@ class WithdrawalRequest(BaseModel):
     requested_at: datetime
 
 
+class CreateWithdrawalRequest(BaseModel):
+    user_id: str = "user-demo-001"
+    points: int = Field(..., gt=0)
+    method: Literal["bank_transfer", "ewallet"]
+    account_target: str
+
+
+class UpdateWithdrawalStatusRequest(BaseModel):
+    status: WithdrawalStatus
+
+
+class CreateEducationArticleRequest(BaseModel):
+    title: str
+    excerpt: str
+    content: str
+    category: Literal["recycling", "lifestyle", "plastic", "campaign"]
+    image_url: Optional[str] = None
+
+
+class UpdateEducationArticleRequest(BaseModel):
+    title: Optional[str] = None
+    excerpt: Optional[str] = None
+    content: Optional[str] = None
+    category: Optional[Literal["recycling", "lifestyle", "plastic", "campaign"]] = None
+    image_url: Optional[str] = None
+
+
 class AdminOverview(BaseModel):
     total_users: int
     total_transactions: int

@@ -1,14 +1,19 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.core.auth import get_current_user, require_admin
 from app.models.schemas import (
     CommandAckRequest,
+    CreateEducationArticleRequest,
     CreateSessionRequest,
+    CreateWithdrawalRequest,
     DeviceRegistrationRequest,
     HeartbeatRequest,
     SensorEventRequest,
+    UpdateEducationArticleRequest,
+    UpdateWithdrawalStatusRequest,
 )
 from app.services.ai_client import validate_bottle_image
 from app.services.persistence import close_persistence, connect_persistence
@@ -52,12 +57,9 @@ async def dev_login(email: str = "arqila@example.com"):
 
 
 @app.get("/api/users/me")
-async def get_me(user_id: str = "user-demo-001"):
+async def get_me(current_user: dict = Depends(get_current_user)):
     state.expire_stale_sessions()
-    user = state.users.get(user_id)
-    if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
+    return current_user
 
 
 @app.get("/api/devices")
@@ -117,29 +119,79 @@ async def list_education():
     return state.articles
 
 
+@app.get("/api/education/{article_id}")
+async def get_education_article(article_id: str):
+    article = next((item for item in state.articles if item.id == article_id), None)
+    if article is None:
+        raise HTTPException(status_code=404, detail="Education article not found")
+    return article
+
+
+@app.post("/api/withdrawals")
+async def create_withdrawal(payload: CreateWithdrawalRequest):
+    try:
+        return state.create_withdrawal(payload)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="User not found")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
 @app.get("/api/admin/dashboard")
-async def admin_dashboard():
+async def admin_dashboard(_admin: dict = Depends(require_admin)):
     return state.dashboard()
 
 
 @app.get("/api/admin/transactions")
-async def admin_transactions():
+async def admin_transactions(_admin: dict = Depends(require_admin)):
     return state.list_transactions()
 
 
 @app.get("/api/admin/users")
-async def admin_users():
+async def admin_users(_admin: dict = Depends(require_admin)):
     return list(state.users.values())
 
 
 @app.get("/api/admin/withdrawals")
-async def admin_withdrawals():
+async def admin_withdrawals(_admin: dict = Depends(require_admin)):
     return state.withdrawals
 
 
 @app.get("/api/admin/iot-logs")
-async def admin_iot_logs():
+async def admin_iot_logs(_admin: dict = Depends(require_admin)):
     return state.iot_logs[-100:]
+
+
+@app.patch("/api/admin/withdrawals/{withdrawal_id}")
+async def update_withdrawal_status(
+    withdrawal_id: str,
+    payload: UpdateWithdrawalStatusRequest,
+    _admin: dict = Depends(require_admin),
+):
+    try:
+        return state.update_withdrawal_status(withdrawal_id, payload.status)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Withdrawal not found")
+
+
+@app.post("/api/admin/education")
+async def create_admin_education_article(
+    payload: CreateEducationArticleRequest,
+    _admin: dict = Depends(require_admin),
+):
+    return state.create_education_article(payload)
+
+
+@app.patch("/api/admin/education/{article_id}")
+async def update_admin_education_article(
+    article_id: str,
+    payload: UpdateEducationArticleRequest,
+    _admin: dict = Depends(require_admin),
+):
+    try:
+        return state.update_education_article(article_id, payload)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Education article not found")
 
 
 @app.post("/api/iot/devices/register")
