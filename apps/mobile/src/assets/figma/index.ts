@@ -9,6 +9,7 @@ import articleDetailHero from "./article-detail-hero.png";
 import articleNoteIcon from "./article-note-icon.svg";
 import articleRelated1 from "./article-related-1.png";
 import articleRelated2 from "./article-related-2.png";
+import activityImpact from "./activity-impact.png";
 import educationFeatured from "./education-featured.png";
 import educationRecycling1 from "./education-recycling-1.png";
 import educationRecycling2 from "./education-recycling-2.png";
@@ -25,6 +26,7 @@ export const figmaAssets = {
   articleDetailHero,
   articleNoteIcon,
   articleRelated: [articleRelated1, articleRelated2],
+  activityImpact,
   binMap,
   ecodropLogo,
   educationFeatured,

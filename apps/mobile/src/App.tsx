@@ -50,6 +50,8 @@ export default function App() {
   const isHomeBinDetail = tab === "home" && selectedSmartBin !== null;
   const isEducationTab = tab === "education";
   const isEducationDetail = isEducationTab && selectedArticle !== null;
+  const isActivityTab = tab === "activity";
+  const isActivityDetail = isActivityTab && selectedTransaction !== null;
 
   useEffect(() => {
     void loadAppData();
@@ -154,13 +156,15 @@ export default function App() {
           <LoginScreen onLogin={startDemoSession} />
         ) : flow === "idle" ? (
           <>
-            {!isProfileSubView && !isHomeBinDetail && !isEducationTab && <AppHeader />}
+            {!isProfileSubView && !isHomeBinDetail && !isEducationTab && !isActivityTab && <AppHeader />}
             <div
               className={
                 isProfileSubView
                   ? "screen-content profile-subview-content"
                   : isHomeBinDetail
                     ? "screen-content home-bin-detail-content"
+                    : isActivityTab
+                      ? "screen-content activity-content"
                     : isEducationTab
                       ? "screen-content education-content"
                     : "screen-content"
@@ -199,7 +203,7 @@ export default function App() {
                 <ProfileScreen user={user} view={profileView} setView={setProfileView} onLogout={logout} />
               )}
             </div>
-            {!isProfileSubView && !isHomeBinDetail && !isEducationDetail && <BottomNav tab={tab} setTab={changeTab} onStart={startDeposit} />}
+            {!isProfileSubView && !isHomeBinDetail && !isEducationDetail && !isActivityDetail && <BottomNav tab={tab} setTab={changeTab} onStart={startDeposit} />}
           </>
         ) : (
           <DepositFlow

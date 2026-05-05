@@ -1,4 +1,5 @@
-import { ArrowLeft, CheckCircle2, Download, Leaf } from "lucide-react";
+import { useEffect, type ReactNode } from "react";
+import { ArrowLeft, CalendarDays, Check, ChevronRight, Download, MapPin, ReceiptText, Share2, Star } from "lucide-react";
 import type { DepositTransaction } from "@ecodrop/shared";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { TransactionItem } from "../components/TransactionItem";
@@ -12,6 +13,10 @@ type ActivityScreenProps = {
 };
 
 export function ActivityScreen({ transactions, selected, onSelect, onBack }: ActivityScreenProps) {
+  useEffect(() => {
+    document.querySelector(".activity-content")?.scrollTo({ top: 0 });
+  }, [selected]);
+
   if (selected) {
     return <ActivityDetail transaction={selected} onBack={onBack} />;
   }
@@ -20,8 +25,10 @@ export function ActivityScreen({ transactions, selected, onSelect, onBack }: Act
   const totalPoints = transactions.reduce((sum, item) => sum + item.points, 0);
 
   return (
-    <div className="screen-stack">
-      <h1 className="screen-title">Aktivitas</h1>
+    <div className="activity-screen">
+      <header className="activity-topbar">
+        <h1>Aktivitas</h1>
+      </header>
       <section className="activity-summary">
         <div className="summary-green">
           <span>Scan Berhasil</span>
@@ -39,15 +46,19 @@ export function ActivityScreen({ transactions, selected, onSelect, onBack }: Act
         <button>Tarik</button>
         <button>Hadiah</button>
       </div>
-      <section className="home-card">
+      <section className="activity-group">
         <span className="list-label">Hari Ini</span>
-        <div className="transaction-list">
-          {transactions.map((transaction) => (
-            <TransactionItem
-              key={transaction.id}
-              transaction={transaction}
-              onClick={() => onSelect(transaction)}
-            />
+        <div className="transaction-list activity-list">
+          {transactions.slice(0, 2).map((transaction) => (
+            <TransactionItem key={transaction.id} transaction={transaction} onClick={() => onSelect(transaction)} />
+          ))}
+        </div>
+      </section>
+      <section className="activity-group">
+        <span className="list-label">Minggu Ini</span>
+        <div className="transaction-list activity-list">
+          {transactions.slice(2).map((transaction) => (
+            <TransactionItem key={transaction.id} transaction={transaction} onClick={() => onSelect(transaction)} />
           ))}
         </div>
       </section>
@@ -67,13 +78,20 @@ export function ActivityScreen({ transactions, selected, onSelect, onBack }: Act
 
 function ActivityDetail({ transaction, onBack }: { transaction: DepositTransaction; onBack: () => void }) {
   return (
-    <div className="detail-screen">
-      <button className="back-link" onClick={onBack}>
-        <ArrowLeft size={20} />
-        Detail Aktivitas
-      </button>
+    <div className="activity-detail-screen">
+      <header className="activity-detail-topbar">
+        <button onClick={onBack} aria-label="Kembali">
+          <ArrowLeft size={16} />
+        </button>
+        <h1>Detail Aktivitas</h1>
+        <button aria-label="Bagikan aktivitas">
+          <Share2 size={18} />
+        </button>
+      </header>
       <div className="detail-hero">
-        <CheckCircle2 size={62} />
+        <span className="status-check">
+          <Check size={40} />
+        </span>
         <h1>{transaction.status === "success" ? "Berhasil" : "Gagal"}</h1>
         <p>
           {transaction.status === "success"
@@ -92,52 +110,52 @@ function ActivityDetail({ transaction, onBack }: { transaction: DepositTransacti
         </div>
       </section>
       <section className="points-card">
-        <span>Total Perolehan</span>
-        <strong>{transaction.points > 0 ? `+${transaction.points}` : "0"} Poin</strong>
-      </section>
-      <section className="home-card detail-info">
-        <h2>Informasi Transaksi</h2>
-        <InfoRow label="Waktu Setoran" value={formatDate(transaction.createdAt)} />
-        <InfoRow label="Lokasi Smart Bin" value={transaction.deviceId} />
-        <InfoRow label="ID Transaksi" value={transaction.id} />
-      </section>
-      <section className="impact-note">
-        <Leaf size={22} />
-        <p>Kontribusi Anda membantu mengurangi emisi karbon di area perkotaan.</p>
-      </section>
-      <section className="detail-impact-panel" aria-label="Dampak setoran">
-        <Leaf size={24} />
+        <span className="points-star">
+          <Star size={18} fill="currentColor" />
+        </span>
         <div>
-          <span>Estimasi dampak</span>
-          <strong>1 botol plastik masuk jalur daur ulang</strong>
+          <span>Total Perolehan</span>
+          <strong>{transaction.points > 0 ? `+${transaction.points}` : "0"} Poin</strong>
         </div>
+        <ChevronRight size={18} />
       </section>
-      <PrimaryButton onClick={onBack}>Kembali</PrimaryButton>
-      <button className="receipt-link">
-        <Download size={16} />
-        Download Receipt
-      </button>
+      <section className="detail-info">
+        <h2>Informasi Transaksi</h2>
+        <InfoRow icon={<CalendarDays size={17} />} label="Waktu Setoran" value="12 Okt 2024, 14:20 WIB" />
+        <InfoRow icon={<MapPin size={17} />} label="Lokasi Smart Bin" value="Thamrin City, Jakarta" />
+        <InfoRow icon={<ReceiptText size={17} />} label="ID Transaksi" value="TRX-882940" mono />
+      </section>
+      <section
+        className="impact-note"
+        style={{
+          backgroundImage: `linear-gradient(0deg, rgba(25, 28, 30, 0.8), rgba(25, 28, 30, 0)), url(${figmaAssets.activityImpact})`
+        }}
+      >
+        <p>Kontribusi Anda telah membantu mengurangi 0.4kg emisi karbon di area perkotaan.</p>
+      </section>
+      <footer className="activity-detail-footer">
+        <PrimaryButton onClick={onBack}>Kembali</PrimaryButton>
+        <div>
+          <button className="receipt-link">
+            <Download size={16} />
+            Download Receipt
+          </button>
+          <span>|</span>
+          <button className="receipt-link">Report Issue</button>
+        </div>
+      </footer>
     </div>
   );
 }
 
-function InfoRow({ label, value }: { label: string; value: string }) {
+function InfoRow({ icon, label, value, mono }: { icon: ReactNode; label: string; value: string; mono?: boolean }) {
   return (
     <div className="info-row">
-      <span>{label}</span>
-      <strong>{value}</strong>
+      <span className="info-icon">{icon}</span>
+      <span>
+        <small>{label}</small>
+        <strong className={mono ? "mono" : undefined}>{value}</strong>
+      </span>
     </div>
   );
-}
-
-function formatDate(value: string): string {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleString("id-ID", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
-  });
 }
