@@ -202,7 +202,7 @@ function HelpView() {
       </section>
 
       <section className="help-callout">
-        <Headphones className="help-callout-watermark" size={156} aria-hidden="true" />
+        <img className="help-callout-watermark" src={figmaAssets.helpSupportAgent} alt="" />
         <h2>Butuh bantuan lebih?</h2>
         <p>Tidak menemukan jawaban yang Anda cari? Hubungi tim EcoDrop untuk bantuan lebih lanjut.</p>
         <button>Hubungi Kami</button>

@@ -2043,6 +2043,8 @@ button:disabled {
   background: transparent;
   color: #3d4a3f;
   font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .help-chip-row {
@@ -2060,7 +2062,8 @@ button:disabled {
   color: #476557;
   background: #ffffff;
   font-size: 14px;
-  font-weight: 800;
+  line-height: 20px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -2098,6 +2101,7 @@ button:disabled {
 .faq-card strong {
   font-size: 16px;
   line-height: 24px;
+  font-weight: 700;
 }
 
 .faq-card svg {
@@ -2115,7 +2119,8 @@ button:disabled {
   padding: 0 24px 24px;
   color: #3d4a3f;
   font-size: 14px;
-  line-height: 23px;
+  font-weight: 400;
+  line-height: 22.75px;
 }
 
 .help-callout {
@@ -2132,14 +2137,16 @@ button:disabled {
   margin: 0 0 11px;
   font-size: 20px;
   line-height: 28px;
+  font-weight: 700;
 }
 
 .help-callout p {
-  max-width: 224px;
-  margin: 0 0 24px;
+  max-width: 222.4px;
+  margin: 0 0 36.7px;
   color: rgba(255, 255, 255, 0.8);
   font-size: 14px;
-  line-height: 23px;
+  font-weight: 400;
+  line-height: 22.75px;
 }
 
 .help-callout button {
@@ -2150,15 +2157,19 @@ button:disabled {
   color: #006d38;
   background: #ffffff;
   font-size: 14px;
-  font-weight: 900;
+  line-height: 20px;
+  font-weight: 700;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 }
 
 .help-callout-watermark {
   position: absolute;
-  right: -28px;
-  bottom: -22px;
-  color: rgba(255, 255, 255, 0.22);
+  width: 192.1px;
+  height: 197.4px;
+  right: -47.6px;
+  bottom: -54.5px;
   transform: rotate(12deg);
+  pointer-events: none;
 }
 
 .privacy-view {
