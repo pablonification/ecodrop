@@ -14,6 +14,18 @@ async def validate_bottle_image(image: UploadFile) -> BottleValidation:
         return BottleValidation(is_valid=False, reason="Empty image upload.")
 
     if settings.use_mock_ai:
+        mock_hint = f"{image.filename or ''} ".encode() + content[:512].lower()
+        if b"invalid" in mock_hint or b"not-bottle" in mock_hint:
+            return BottleValidation(
+                is_valid=False,
+                brand="Unknown",
+                confidence=0.18,
+                volume_ml=0,
+                height_mm=0,
+                diameter_mm=0,
+                estimated_points=0,
+                reason="Mock validation rejected the upload as a non-bottle object.",
+            )
         return BottleValidation(
             is_valid=True,
             brand="Aqua",

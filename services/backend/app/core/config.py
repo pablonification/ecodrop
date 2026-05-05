@@ -1,8 +1,11 @@
 from functools import lru_cache
+from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
+    model_config = ConfigDict(env_file=".env", extra="ignore")
+
     ecodrop_env: str = "development"
     jwt_secret_key: str = "replace-me-for-demo"
     mongodb_uri: str = "mongodb://localhost:27017"
@@ -19,10 +22,6 @@ class Settings(BaseSettings):
     bottle_min_volume_ml: int = 250
     bottle_max_volume_ml: int = 2000
     points_per_100ml: int = 10
-
-    class Config:
-        env_file = ".env"
-        extra = "ignore"
 
 
 @lru_cache
