@@ -51,11 +51,16 @@ export function ActivityScreen({ transactions, selected, onSelect, onBack }: Act
           ))}
         </div>
       </section>
-      <button
-        className="figma-image-card reward-banner"
-        style={{ backgroundImage: `url(${figmaAssets.activityRewardBanner})` }}
-        aria-label="Tukar 5.000 Poin. Klaim sekarang"
-      />
+      <section
+        className="reward-banner"
+        style={{
+          backgroundImage: `linear-gradient(90deg, rgba(2, 32, 22, 0.88), rgba(2, 32, 22, 0.42)), url(${figmaAssets.rewardForestBg})`
+        }}
+      >
+        <h2>Tukar 5.000 Poin!</h2>
+        <p>Dapatkan tote bag EcoDrop eksklusif</p>
+        <button>Klaim Sekarang</button>
+      </section>
     </div>
   );
 }
@@ -100,7 +105,13 @@ function ActivityDetail({ transaction, onBack }: { transaction: DepositTransacti
         <Leaf size={22} />
         <p>Kontribusi Anda membantu mengurangi emisi karbon di area perkotaan.</p>
       </section>
-      <img className="detail-cover-image" src={figmaAssets.activityDetailCover} alt="" />
+      <section className="detail-impact-panel" aria-label="Dampak setoran">
+        <Leaf size={24} />
+        <div>
+          <span>Estimasi dampak</span>
+          <strong>1 botol plastik masuk jalur daur ulang</strong>
+        </div>
+      </section>
       <PrimaryButton onClick={onBack}>Kembali</PrimaryButton>
       <button className="receipt-link">
         <Download size={16} />

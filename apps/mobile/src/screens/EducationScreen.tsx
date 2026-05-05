@@ -35,12 +35,14 @@ export function EducationScreen({ articles, selected, onSelect, onBack }: Educat
   return (
     <div className="screen-stack">
       <h1 className="screen-title">Edukasi</h1>
-      <button
-        className="figma-image-card education-hero"
-        onClick={() => articles[0] && onSelect(articles[0])}
-        style={{ backgroundImage: `url(${figmaAssets.educationHero})` }}
-        aria-label="Artikel unggulan: Cara memilah plastik rumah tangga dengan benar"
-      />
+      <button className="education-hero" onClick={() => articles[0] && onSelect(articles[0])}>
+        <span className="card-eyebrow">Unggulan</span>
+        <h2>Cara memilah plastik rumah tangga dengan benar</h2>
+        <span className="education-symbol" aria-hidden="true">
+          3
+        </span>
+        <small aria-hidden="true">Feature Education</small>
+      </button>
       {articles.map((article, index) => (
         <button className="article-row" key={article.id} onClick={() => onSelect(article)}>
           <img

@@ -329,11 +329,10 @@ function DepositResult({
       <div className="result-icon">{tone === "success" ? <Check size={38} /> : <X size={38} />}</div>
       <h2>{title}</h2>
       <p>{description}</p>
-      <img
-        className="deposit-result-banner"
-        src={tone === "success" ? figmaAssets.successBanner : figmaAssets.failedBanner}
-        alt=""
-      />
+      <div className="deposit-result-visual" aria-hidden="true">
+        <span />
+        <img src={figmaAssets.aquaBottle} alt="" />
+      </div>
       <section className="result-summary-card">
         <strong className="points-total">+{points} Poin</strong>
         <span>{tone === "success" ? "Berhasil Ditambahkan" : "Poin Batal Ditambahkan"}</span>

@@ -64,12 +64,15 @@ export function HomeScreen({
         </div>
       </section>
 
-      <button
-        className="figma-image-card eco-tip-card"
-        onClick={onOpenEducation}
-        style={{ backgroundImage: `url(${figmaAssets.ecoTipCard})` }}
-        aria-label="Baca tips hari ini: Cara memilah plastik rumah tangga dengan benar"
-      />
+      <button className="eco-tip" onClick={onOpenEducation}>
+        <span className="card-eyebrow">Tips Hari Ini</span>
+        <h2>Cara memilah plastik rumah tangga dengan benar</h2>
+        <strong>Baca Selengkapnya</strong>
+        <span className="tip-watermark" aria-hidden="true">
+          ECO
+        </span>
+        <span className="tip-shape" aria-hidden="true" />
+      </button>
 
       <PrimaryButton onClick={onStart} className="home-cta">
         Mulai Setor Botol
